@@ -2,23 +2,28 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# copy csproj(s) and restore first (speeds up rebuilds)
-COPY *.sln .
+# Copy solution and project files
+COPY *.sln ./
 COPY *.csproj ./
+
+# Restore NuGet packages
 RUN dotnet restore
 
-# copy everything and publish
-COPY . .
-WORKDIR /src/AdamsScienceHub
+# Copy everything else and publish
+COPY . ./
 RUN dotnet publish -c Release -o /app
 
-# 2) Runtime
+# 2) Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=build /app .
 
-EXPOSE 8080
-ENV ASPNETCORE_URLS=http://+:8080
+# Copy published files from build stage
+COPY --from=build /app ./
+
+# Expose the port Render expects
+EXPOSE 10000
+ENV ASPNETCORE_URLS=http://+:10000
 ENV ASPNETCORE_ENVIRONMENT=Production
 
+# Run the app
 ENTRYPOINT ["dotnet", "AdamsScienceHub.dll"]
