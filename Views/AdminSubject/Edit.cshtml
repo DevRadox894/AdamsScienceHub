@@ -1,0 +1,42 @@
+﻿@model AdamsScienceHub.Models.Subject
+@{
+    ViewData["Title"] = "Edit Subject";
+}
+
+<div class="admin-container">
+    <div class="admin-greeting mb-4">
+        <h2>Edit Subject</h2>
+    </div>
+
+    <form asp-controller="AdminSubject" asp-action="Edit" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.SubjectId" />
+
+        <div class="mb-3">
+            <label class="form-label">Subject Name</label>
+            <input type="text" name="SubjectName" value="@Model.SubjectName" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Current Image</label>
+            <div>
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <img src="@Model.ImagePath" style="width:120px;height:80px;object-fit:cover;border-radius:6px" />
+                }
+                else
+                {
+                    <div style="width:120px;height:80px;background:#222;border-radius:6px"></div>
+                }
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Replace Image</label>
+            <input type="file" name="ImageFile" accept="image/*" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-add">Save</button>
+        <a asp-controller="AdminSubject" asp-action="ManageSubjects" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

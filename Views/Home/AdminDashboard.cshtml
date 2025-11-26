@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="admin-container">
+
+    <!-- Greeting Section -->
+    <div class="admin-greeting">
+        <h2>Welcome Admin 👋</h2>
+        <p>Manage everything from one place.</p>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="row admin-dashboard">
+
+        <!-- Manage Users -->
+        <div class="col-12 col-lg-6">
+            <a href="/Admin/Users" class="dashboard-card">
+                <h5>Manage Users</h5>
+                <p>View, edit, and monitor users</p>
+            </a>
+        </div>
+
+        <!-- Manage Subjects -->
+        <div class="col-12 col-lg-6">
+            <a href="/AdminSubject/ManageSubjects" class="dashboard-card">
+                <h5>Manage Subjects</h5>
+                <p>Add or update subjects</p>
+            </a>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <a href="/AdminQuestions/ManageQuestions" class="dashboard-card">
+                <h5>Manage Questions</h5>
+                <p>Add / edit exam questions</p>
+            </a>
+        </div>
+       
+
+        <!-- Manage Materials -->
+        <div class="col-12 col-lg-6">
+            <a href="/AdminMaterials/ManageMaterials" class="dashboard-card">
+                <h5>Manage Materials</h5>
+                <p>Upload and manage study materials</p>
+            </a>
+        </div>
+
+    </div>
+</div>

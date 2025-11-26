@@ -1,0 +1,102 @@
+﻿@model IEnumerable<AdamsScienceHub.Models.Subject>
+
+<div class="admin-container">
+    <div class="admin-greeting mb-4">
+        <h2>Manage Practice Questions</h2>
+        <a asp-controller="Home" asp-action="AdminDashboard" class="btn btn-secondary mb-3">
+            ← Back to Dashboard
+        </a>
+        <p>Add subjects and manage practice questions for each subject.</p>
+    </div>
+
+    <!-- Add New Subject Section -->
+    <div class="card mb-4" style="background: #1f1f2a; border: 1px solid #44445a; border-radius: 10px;">
+        <div class="card-header" style="background: #2a2a3d; border-bottom: 2px solid #00f0ff;">
+            <h5 style="color: #00f0ff; margin: 0;">Add Subject to Practice Questions</h5>
+           
+        </div>
+        <div class="card-body" style="color: #fff;">
+            <form asp-controller="AdminQuestions" asp-action="AddSubject" method="post">
+                <div class="row">
+                    <div class="col-md-8 mb-2">
+                        <input type="text" name="subjectName" class="form-control subject-input" placeholder="Enter subject name" required
+                               style="background: #262636; border: 1px solid #44445a; color: white;">
+                    </div>
+
+                    <style>
+                        /* Placeholder color for this specific input */
+                        .subject-input::placeholder {
+                            color: #00f0ff;
+                            opacity: 1; /* Make sure the color is fully visible */
+                        }
+                    </style>
+
+                    <div class="col-md-8 mb-2">
+                        <div class="calculator-toggle form-check mb-3" style="margin-bottom: 1rem; background-color: #1f1f2a; padding: 10px; border-radius: 5px;">
+                            <input type="checkbox" name="calculatorEnabled"
+                                   class="calculator-toggle-input form-check-input"
+                                   id="calculatorToggle"
+                                   style="width: 20px; height: 20px; accent-color: #00f0ff;">
+                            <label class="calculator-toggle-label form-check-label"
+                                   for="calculatorToggle"
+                                   style="color: #00f0ff; font-weight: 500; margin-left: 8px;">
+                                Enable Calculator for this subject
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-add">Add Subject</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Available Subjects for Practice Questions -->
+    <div class="card" style="background: #1f1f2a; border: 1px solid #44445a; border-radius: 10px;">
+        <div class="card-header" style="background: #2a2a3d; border-bottom: 2px solid #00f0ff;">
+            <h5 style="color: #00f0ff; margin: 0;">Available Practice Subjects</h5>
+            <p class="mb-0" style="color: #b0c4de;">Click on a subject to manage its questions</p>
+        </div>
+        <div class="card-body" style="color: #fff;">
+            <div class="row">
+                @foreach (var subject in Model)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="dashboard-card p-3" style="background: #1f1f2a; border: 1px solid #44445a; border-radius: 10px; height: 100%;">
+                            <h5 style="color: #00f0ff;">@subject.SubjectName</h5>
+                            <p class="small" style="color: #b0c4de;">Subject ID: @subject.SubjectId</p>
+
+                            <div class="d-flex gap-1 mt-3" style="justify-content: center; flex-wrap: wrap;">
+                                <a asp-controller="AdminQuestions"
+                                   asp-action="ViewQuestions"
+                                   asp-route-subjectId="@subject.SubjectId"
+                                   class="btn btn-edit" style="font-size: 11px;">
+                                    Manage Questions
+                                </a>
+                                <a asp-controller="AdminQuestions"
+                                   asp-action="DeleteSubject"
+                                   asp-route-id="@subject.SubjectId"
+                                   class="btn btn-delete" style="font-size: 11px;"
+                                   onclick="return confirm('Are you sure? This will delete all questions in this subject.')">
+                                    Delete
+                                </a>
+                            </div>
+
+                      
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-4">
+                    <p style="color: #b0c4de;">No subjects available. Add a subject to start creating questions.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

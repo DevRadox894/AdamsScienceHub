@@ -1,0 +1,212 @@
+﻿@model AdamsScienceHub.Models.User
+
+@using Microsoft.AspNetCore.Authorization
+@using AdamsScienceHub.Models
+@{
+    ViewData["Title"] = "User Dashboard";
+    Layout = "_Layout";
+
+    // Extract first name
+    var fullName = Model.FullName?.Trim() ?? "";
+    var firstName = fullName.Contains(" ") ? fullName.Split(' ')[0] : fullName;
+
+    // Subjects from ViewBag
+    var subjects = ViewBag.Subjects as List<Subject>;
+}
+
+<div class="container py-5" style="margin-top:4px">
+
+    <h2 class="mb-1" style="font-weight:bold; font-size:15px;">Welcome back, @firstName!</h2>
+    <p style="font-size:14.3px; color:black; margin-top:10px; font-family:Calibri;">
+        Explore available subjects, boost your knowledge, and keep learning every day! Dive in, discover new ideas, and make learning exciting.
+    </p>
+
+    <div class="row g-3">
+        @if (subjects != null && subjects.Any())
+        {
+            @foreach (var subject in subjects)
+            {
+                <div class="col-12 col-md-6">
+                    <a href="@Url.Action("Explore", "Subjects", new { id = subject.SubjectId })"
+                       class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100">
+                        @if (!string.IsNullOrEmpty(subject.ImagePath))
+                        {
+                            <img src="@subject.ImagePath" alt="@subject.SubjectName" class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
+                        }
+                        else
+                        {
+                            <div style="width:100%;height:150px;background:#222;border-radius:8px;margin-bottom:12px;"></div>
+                        }
+                        <h5 class="fw-semibold">Explore @subject.SubjectName</h5>
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-center mt-4" style="color:#b0c4de;">No subjects available yet.</p>
+        }
+
+        <!-- Hardcoded cards -->
+        <div class="col-12 col-md-6">
+            <a href="@Url.Action("Subjects", "PracticeQuestions")"
+               class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100">
+                <img src="~/images/prac.png" alt="Practice Questions" class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
+                <h5 class="fw-semibold">Practice Questions</h5>
+            </a>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <a href="@Url.Action("Progress", "Account")"
+               class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100">
+                <img src="~/images/pro.png" alt="TrackingProgress" class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
+                <h5 class="fw-semibold">Tracking Progress</h5>
+            </a>
+        </div>
+
+  </div> <!-- closes <div class="row g-3"> -->
+
+    <!-- Profile Card -->
+    <!-- Profile Card -->
+    <div class="col-12 col-md-6">
+        <div class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100"
+             data-bs-toggle="modal" data-bs-target="#profileModal" style="cursor:pointer;">
+            <img src="~/images/profile.png" alt="Profile" class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
+            <h5 class="fw-semibold">Profile</h5>
+        </div>
+    </div>
+
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">User Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- VIEW MODE -->
+                    <div id="profileViewSection">
+                        <p><strong>Full Name:</strong> <span id="userFullName">Loading...</span></p>
+                        <p><strong>Email:</strong> <span id="userEmail">Loading...</span></p>
+                    </div>
+
+                    <!-- EDIT MODE -->
+                    <div id="profileEditSection" style="display:none;">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="editFullName" class="form-control" />
+
+                        <label class="form-label mt-3">Email</label>
+                        <input type="text" id="editEmail" class="form-control" disabled />
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button id="editBtn" class="btn btn-primary">Edit</button>
+                    <button id="saveBtn" class="btn btn-success" style="display:none;">Save</button>
+                    <button id="cancelBtn" class="btn btn-secondary" style="display:none;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+        <script>
+            $(document).ready(function () {
+
+                // Load profile info when modal opens
+                $('#profileModal').on('show.bs.modal', function () {
+                    $.get('@Url.Action("GetUserInfo", "Account")', function (response) {
+                        if (response.success) {
+                            $('#userFullName').text(response.fullName);
+                            $('#userEmail').text(response.email);
+                        } else {
+                            $('#userFullName').text("N/A");
+                            $('#userEmail').text("N/A");
+                        }
+                    });
+                });
+
+                // Switch to EDIT MODE
+                $('#editBtn').click(function () {
+                    $.get('@Url.Action("GetUserInfo", "Account")', function (res) {
+                        if (res.success) {
+                            $('#editFullName').val(res.fullName);
+                            $('#editEmail').val(res.email);
+
+                            $('#profileViewSection').hide();
+                            $('#profileEditSection').show();
+
+                            $('#editBtn').hide();
+                            $('#saveBtn').show();
+                            $('#cancelBtn').show();
+                        }
+                    });
+                });
+
+                // SAVE update
+                $('#saveBtn').click(function () {
+                    $.post('@Url.Action("UpdateProfile", "Account")',
+                        { fullName: $('#editFullName').val() },
+                        function (res) {
+                            if (res.success) {
+                                $('#userFullName').text($('#editFullName').val());
+
+                                // return to view mode
+                                $('#profileEditSection').hide();
+                                $('#profileViewSection').show();
+                                $('#saveBtn').hide();
+                                $('#cancelBtn').hide();
+                                $('#editBtn').show();
+                            } else {
+                                alert("Failed to update profile.");
+                            }
+                        });
+                });
+
+                // CANCEL editing
+                $('#cancelBtn').click(function () {
+                    $('#profileEditSection').hide();
+                    $('#profileViewSection').show();
+
+                    $('#saveBtn').hide();
+                    $('#cancelBtn').hide();
+                    $('#editBtn').show();
+                });
+            });
+        </script>
+}
+    
+
+<!-- Optional CSS -->
+<style>
+    .card:hover {
+        transform: translateY(-4px);
+        transition: 0.2s;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+
+    .card-img-top {
+        border-radius: 8px;
+    }
+
+    .modal-content {
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #e5e5e5;
+    }
+</style>
