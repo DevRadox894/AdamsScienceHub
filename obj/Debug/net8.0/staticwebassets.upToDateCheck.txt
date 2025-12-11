@@ -7,13 +7,7 @@ wwwroot\FaviconFile\favicon_io\favicon-32x32.png
 wwwroot\FaviconFile\favicon_io\favicon.ico
 wwwroot\FaviconFile\favicon_io\site.webmanifest
 wwwroot\favicon_io.zip
-wwwroot\Images\agr.png
-wwwroot\Images\bio.png
-wwwroot\Images\chm.png
-wwwroot\Images\ict.png
 wwwroot\Images\Kris.jpg
-wwwroot\Images\math.png
-wwwroot\Images\phy.png
 wwwroot\Images\prac.png
 wwwroot\Images\pro.png
 wwwroot\Images\profile.png

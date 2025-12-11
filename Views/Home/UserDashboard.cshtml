@@ -48,33 +48,35 @@
         }
 
         <!-- Hardcoded cards -->
-        <div class="col-12 col-md-6">
-            <a href="@Url.Action("Subjects", "PracticeQuestions")"
-               class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100">
-                <img src="~/images/prac.png" alt="Practice Questions" class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
-                <h5 class="fw-semibold">Practice Questions</h5>
-            </a>
-        </div>
+   <div class="col-12 col-md-6">
+    <a href="@Url.Action("Subjects", "PracticeQuestions")"
+       class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100">
+        <img src="/images/prac.png" alt="Practice Questions" 
+             class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
+        <h5 class="fw-semibold">Practice Questions</h5>
+    </a>
+</div>
 
-        <div class="col-12 col-md-6">
-            <a href="@Url.Action("Progress", "Account")"
-               class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100">
-                <img src="~/images/pro.png" alt="TrackingProgress" class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
-                <h5 class="fw-semibold">Tracking Progress</h5>
-            </a>
-        </div>
+<div class="col-12 col-md-6">
+    <a href="@Url.Action("Progress", "Account")"
+       class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100">
+        <img src="/images/pro.png" alt="TrackingProgress" 
+             class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
+        <h5 class="fw-semibold">Tracking Progress</h5>
+    </a>
+</div>
 
-  </div> <!-- closes <div class="row g-3"> -->
+</div> <!-- closes row -->
 
-    <!-- Profile Card -->
-    <!-- Profile Card -->
-    <div class="col-12 col-md-6">
-        <div class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100"
-             data-bs-toggle="modal" data-bs-target="#profileModal" style="cursor:pointer;">
-            <img src="~/images/profile.png" alt="Profile" class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
-            <h5 class="fw-semibold">Profile</h5>
-        </div>
+<!-- Profile Card -->
+<div class="col-12 col-md-6">
+    <div class="card text-center p-4 text-decoration-none text-dark shadow-sm h-100"
+         data-bs-toggle="modal" data-bs-target="#profileModal" style="cursor:pointer;">
+        <img src="/images/profile.png" alt="Profile" 
+             class="card-img-top mb-3" style="max-height:150px; object-fit:cover;">
+        <h5 class="fw-semibold">Profile</h5>
     </div>
+</div>
 
 
     <!-- Profile Modal -->
