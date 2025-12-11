@@ -20,11 +20,11 @@ builder.Services.AddSession(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite("Data Source=adamshub.db"));
 
-// ✅ Cookie Authentication
+// Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login";   // redirect if not logged in
+        options.LoginPath = "/Account/Login";
         options.LogoutPath = "/Account/Logout";
         options.ExpireTimeSpan = TimeSpan.FromDays(30);
         options.SlidingExpiration = true;
@@ -43,7 +43,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-// ⚡ Important order: Session, then Authentication, then Authorization
+// Order is important
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -52,6 +52,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// 🔥 REQUIRED FOR RENDER — bind to 0.0.0.0 and PORT
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+app.Urls.Clear();
+app.Urls.Add($"http://0.0.0.0:{port}");
 
 // DB migration and seeding
 using (var scope = app.Services.CreateScope())

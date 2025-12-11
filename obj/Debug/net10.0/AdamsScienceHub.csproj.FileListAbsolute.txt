@@ -226,3 +226,7 @@ C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\co
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net10.0\adamshub.db
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\9bdxixz1at-{0}-9dp4vqddze-9dp4vqddze.gz
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\54d6jbdsmv-{0}-6sx6pifph3-6sx6pifph3.gz
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net10.0\BouncyCastle.Cryptography.dll
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net10.0\MailKit.dll
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net10.0\MimeKit.dll
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\AdamsScienceHub.sourcelink.json
