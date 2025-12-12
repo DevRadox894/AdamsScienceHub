@@ -17,8 +17,9 @@ builder.Services.AddSession(options =>
 });
 
 // Database
+// Database — PostgreSQL via Render Environment Variable
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite("Data Source=adamshub.db"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
