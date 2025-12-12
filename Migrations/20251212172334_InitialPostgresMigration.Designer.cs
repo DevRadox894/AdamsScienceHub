@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdamsScienceHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251125092719_AddCalculatorToSubject")]
-    partial class AddCalculatorToSubject
+    [Migration("20251212172334_InitialPostgresMigration")]
+    partial class InitialPostgresMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
 
             modelBuilder.Entity("AdamsScienceHub.Models.Material", b =>
                 {
@@ -168,6 +168,45 @@ namespace AdamsScienceHub.Migrations
                     b.ToTable("UserSubjectProgress");
                 });
 
+            modelBuilder.Entity("QuizResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CorrectAnswers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateTaken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TimeSpent")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TotalQuestions")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WrongAnswers")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("QuizResults");
+                });
+
             modelBuilder.Entity("AdamsScienceHub.Models.Material", b =>
                 {
                     b.HasOne("AdamsScienceHub.Models.Subject", "Subject")
@@ -190,9 +229,25 @@ namespace AdamsScienceHub.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("QuizResult", b =>
+                {
+                    b.HasOne("AdamsScienceHub.Models.User", "User")
+                        .WithMany("QuizResults")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AdamsScienceHub.Models.Subject", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("AdamsScienceHub.Models.User", b =>
+                {
+                    b.Navigation("QuizResults");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,7 +3,6 @@ C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net8.0\app
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net8.0\AdamsScienceHub.staticwebassets.runtime.json
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net8.0\AdamsScienceHub.staticwebassets.endpoints.json
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net8.0\AdamsScienceHub.exe
-C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net8.0\adamshub.db
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net8.0\AdamsScienceHub.deps.json
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net8.0\AdamsScienceHub.runtimeconfig.json
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net8.0\AdamsScienceHub.dll

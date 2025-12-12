@@ -35,10 +35,5 @@
 	</ItemGroup>
 
 	<!-- Ensure SQLite database is copied on publish -->
-	<ItemGroup>
-		<None Update="adamshub.db">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
 
 </Project>

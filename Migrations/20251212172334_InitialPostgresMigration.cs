@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AdamsScienceHub.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialPostgresMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,8 @@ namespace AdamsScienceHub.Migrations
                     SubjectId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     SubjectName = table.Column<string>(type: "TEXT", nullable: false),
-                    ImagePath = table.Column<string>(type: "TEXT", nullable: true)
+                    ImagePath = table.Column<string>(type: "TEXT", nullable: true),
+                    CalculatorEnabled = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,10 +82,72 @@ namespace AdamsScienceHub.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Questions",
+                columns: table => new
+                {
+                    QuestionId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SubjectId = table.Column<int>(type: "INTEGER", nullable: false),
+                    QuestionText = table.Column<string>(type: "TEXT", nullable: false),
+                    OptionA = table.Column<string>(type: "TEXT", nullable: false),
+                    OptionB = table.Column<string>(type: "TEXT", nullable: false),
+                    OptionC = table.Column<string>(type: "TEXT", nullable: false),
+                    OptionD = table.Column<string>(type: "TEXT", nullable: false),
+                    CorrectAnswer = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Questions", x => x.QuestionId);
+                    table.ForeignKey(
+                        name: "FK_Questions_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "SubjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuizResults",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SubjectName = table.Column<string>(type: "TEXT", nullable: false),
+                    DateTaken = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TotalQuestions = table.Column<int>(type: "INTEGER", nullable: false),
+                    Score = table.Column<double>(type: "REAL", nullable: false),
+                    CorrectAnswers = table.Column<int>(type: "INTEGER", nullable: false),
+                    WrongAnswers = table.Column<int>(type: "INTEGER", nullable: false),
+                    TimeSpent = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizResults", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuizResults_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Materials_SubjectId",
                 table: "Materials",
                 column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_SubjectId",
+                table: "Questions",
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizResults_UserId",
+                table: "QuizResults",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -94,13 +157,19 @@ namespace AdamsScienceHub.Migrations
                 name: "Materials");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "QuizResults");
 
             migrationBuilder.DropTable(
                 name: "UserSubjectProgress");
 
             migrationBuilder.DropTable(
                 name: "Subjects");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }
