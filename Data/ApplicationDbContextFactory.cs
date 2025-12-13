@@ -3,13 +3,15 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace AdamsScienceHub.Data
 {
-    // Factory EF uses at design time for migrations
-    public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    public class ApplicationDbContextFactory
+        : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
         public ApplicationDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlite("Data Source=adamshub.db"); // Same as Program.cs
+
+            // ✅ DESIGN-TIME ONLY (local dev / migrations)
+            optionsBuilder.UseSqlite("Data Source=adamshub-dev.db");
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }
