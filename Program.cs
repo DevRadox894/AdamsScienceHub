@@ -63,13 +63,8 @@ app.Urls.Add($"http://0.0.0.0:{port}");
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-    // ✅ Only ensure DB exists (NO table creation)
-    db.Database.OpenConnection();
-    db.Database.CloseConnection();
-
-    // ✅ Seed admin ONLY if missing
-    DbSeeder.SeedAdmin(db);
+    db.Database.Migrate();       // Applies migrations
+    DbSeeder.SeedAdmin(db);      // Seeds the admin
 }
 
 
