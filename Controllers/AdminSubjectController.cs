@@ -1,14 +1,13 @@
-﻿using System;
+﻿using AdamsScienceHub.Data;
+using AdamsScienceHub.Models;
+using Microsoft.AspNetCore.Mvc;
+ using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using AdamsScienceHub.Data;
-using AdamsScienceHub.Models;
 
-namespace AdamsScienceHub.Controllers
-{
+
     public class AdminSubjectController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -135,4 +134,4 @@ namespace AdamsScienceHub.Controllers
             return RedirectToAction(nameof(ManageSubjects));
         }
     }
-}
+
