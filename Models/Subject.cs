@@ -14,7 +14,7 @@ namespace AdamsScienceHub.Models
 
         public string? ImagePath { get; set; }
 
-        public bool CalculatorEnabled { get; set; } = false;
+        public bool CalculatorEnabled { get; set; } 
 
         public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
     }
