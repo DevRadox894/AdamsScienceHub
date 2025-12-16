@@ -1,0 +1,102 @@
+﻿@model List<AdamsScienceHub.Models.Question>
+
+@{
+    ViewData["Title"] = "Quiz Review";
+    var userAnswers = ViewBag.UserAnswers as List<string>;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h2 class="mb-4 text-center">Review Your Answers</h2>
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var q = Model[i];
+                var userAnswer = (userAnswers != null && i < userAnswers.Count) ? userAnswers[i] : "";
+                bool isCorrect = userAnswer == q.CorrectAnswer;
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                        <h5>@(i + 1). @Html.Raw(q.QuestionText.Replace("[       ]", "________"))</h5>
+
+                        <ul class="list-group mt-2">
+                            <li class="list-group-item @(userAnswer == "A" ? (isCorrect ? "bg-success text-white" : "bg-danger text-white") : (q.CorrectAnswer == "A" ? "bg-success text-white" : ""))">
+                                A. @q.OptionA
+                                @if (!isCorrect && userAnswer == "A")
+                                {
+                                    <span class="badge bg-warning text-dark ms-2">Your Answer</span>
+                                }
+                                @if (q.CorrectAnswer == "A")
+                                {
+                                    <span class="badge bg-success ms-2">Correct Answer</span>
+                                }
+                            </li>
+                            <li class="list-group-item @(userAnswer == "B" ? (isCorrect ? "bg-success text-white" : "bg-danger text-white") : (q.CorrectAnswer == "B" ? "bg-success text-white" : ""))">
+                                B. @q.OptionB
+                                @if (!isCorrect && userAnswer == "B")
+                                {
+                                    <span class="badge bg-warning text-dark ms-2">Your Answer</span>
+                                }
+                                @if (q.CorrectAnswer == "B")
+                                {
+                                    <span class="badge bg-success ms-2">Correct Answer</span>
+                                }
+                            </li>
+                            <li class="list-group-item @(userAnswer == "C" ? (isCorrect ? "bg-success text-white" : "bg-danger text-white") : (q.CorrectAnswer == "C" ? "bg-success text-white" : ""))">
+                                C. @q.OptionC
+                                @if (!isCorrect && userAnswer == "C")
+                                {
+                                    <span class="badge bg-warning text-dark ms-2">Your Answer</span>
+                                }
+                                @if (q.CorrectAnswer == "C")
+                                {
+                                    <span class="badge bg-success ms-2">Correct Answer</span>
+                                }
+                            </li>
+                            <li class="list-group-item @(userAnswer == "D" ? (isCorrect ? "bg-success text-white" : "bg-danger text-white") : (q.CorrectAnswer == "D" ? "bg-success text-white" : ""))">
+                                D. @q.OptionD
+                                @if (!isCorrect && userAnswer == "D")
+                                {
+                                    <span class="badge bg-warning text-dark ms-2">Your Answer</span>
+                                }
+                                @if (q.CorrectAnswer == "D")
+                                {
+                                    <span class="badge bg-success ms-2">Correct Answer</span>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            }
+
+            <div class="text-center mt-4">
+                <a asp-controller="PracticeQuestions" asp-action="Subjects" class="btn btn-primary btn-lg me-2">Practice Another Subject</a>
+                <a asp-controller="PracticeQuestions" asp-action="Subjects" class="btn btn-outline-secondary btn-lg">Back </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: #f8f9fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+        border-radius: 1rem;
+    }
+
+        .card h5 {
+            font-weight: 600;
+        }
+
+    .list-group-item {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+    }
+</style>

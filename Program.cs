@@ -1,10 +1,11 @@
 ﻿using AdamsScienceHub.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
+// MVC
 builder.Services.AddControllersWithViews();
 
 // Session
@@ -16,10 +17,18 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Database
-// Database — PostgreSQL via Render Environment Variable
+// PostgreSQL — Main App DB
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// PostgreSQL — Data Protection Keys (same DB)
+builder.Services.AddDbContext<DataProtectionKeyContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Persist Data Protection keys in PostgreSQL
+builder.Services.AddDataProtection()
+    .SetApplicationName("AdamsScienceHub") // 🔥 IMPORTANT
+    .PersistKeysToDbContext<DataProtectionKeyContext>();
 
 // Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -44,28 +53,31 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-// Order is important
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Default route
+// Routes
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// 🔥 REQUIRED FOR RENDER — bind to 0.0.0.0 and PORT
+// 🔥 Render PORT binding
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 app.Urls.Clear();
 app.Urls.Add($"http://0.0.0.0:{port}");
 
-// DB migration and seeding
-using (var scope = app.Services.CreateScope())
+// Run migrations ONLY in Development
+if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();       // Applies migrations
-    DbSeeder.SeedAdmin(db);      // Seeds the admin
-}
+    var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
 
+    db.Database.Migrate();
+    keyDb.Database.Migrate();
+
+    DbSeeder.SeedAdmin(db);
+}
 
 app.Run();

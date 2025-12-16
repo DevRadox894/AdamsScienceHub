@@ -1,0 +1,154 @@
+﻿@model List<AdamsScienceHub.Models.Question>
+
+@{
+    var subject = ViewBag.Subject as AdamsScienceHub.Models.Subject;
+    var timeLimit = ViewBag.TimeLimit ?? 0;
+    var totalQuestions = Model.Count;
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>@subject?.SubjectName – Quiz</h3>
+        <a asp-controller="PracticeQuestions" asp-action="Subjects" class="btn btn-outline-secondary">Exit Quiz</a>
+    </div>
+
+    @if (timeLimit > 0)
+    {
+        <div class="alert alert-warning">
+            <strong>Time Left:</strong> <span id="timeDisplay">@timeLimit:00</span>
+        </div>
+    }
+
+    <form method="post" asp-action="SubmitQuiz" id="quizForm">
+        <input type="hidden" name="SubjectId" value="@subject?.SubjectId" />
+        <input type="hidden" id="currentPage" value="1" />
+
+        @for (int i = 0; i < totalQuestions; i++)
+        {
+            int pageNumber = (i / 10) + 1;
+
+            <div class="card p-4 mb-4 question-page question-page-@pageNumber @(pageNumber != 1 ? "d-none" : "")">
+                <h5 class="card-title">@(i + 1). @Html.Raw(Model[i].QuestionText.Replace("[       ]", "________"))</h5>
+
+                <!-- Hidden QuestionId -->
+                <input type="hidden" name="QuestionId" value="@Model[i].QuestionId" />
+
+                <div class="mt-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_A" value="A" onchange="updateProgress()">
+                        <label class="form-check-label" for="q@(i)_A">A. @Model[i].OptionA</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_B" value="B" onchange="updateProgress()">
+                        <label class="form-check-label" for="q@(i)_B">B. @Model[i].OptionB</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_C" value="C" onchange="updateProgress()">
+                        <label class="form-check-label" for="q@(i)_C">C. @Model[i].OptionC</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_D" value="D" onchange="updateProgress()">
+                        <label class="form-check-label" for="q@(i)_D">D. @Model[i].OptionD</label>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Pagination -->
+        <div class="pagination text-center mt-4">
+            <button type="button" class="btn btn-outline-primary" id="prevBtn" onclick="changePage(-1)">Previous</button>
+            <span class="mx-3" id="pageInfo"></span>
+            <button type="button" class="btn btn-outline-primary" id="nextBtn" onclick="changePage(1)">Next</button>
+        </div>
+     
+        <input type="hidden" name="timeUsedSeconds" id="timeUsedSeconds" value="0" />
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success btn-lg" onclick="return confirmSubmit()">Submit Quiz</button>
+            <div class="mt-2 text-muted small" id="progress">Answered: 0/@totalQuestions</div>
+        </div>
+    </form>
+</div>
+
+<script>
+    const totalQuestions = @totalQuestions;
+
+    function getAnsweredCount() {
+        return document.querySelectorAll('input[type="radio"]:checked').length;
+    }
+
+    function updateProgress() {
+        const answered = getAnsweredCount();
+        document.getElementById('progress').textContent = `Answered: ${answered}/${totalQuestions}`;
+    }
+
+    function confirmSubmit() {
+        const answered = getAnsweredCount();
+        if (answered < totalQuestions) {
+            return confirm(`You have answered ${answered} out of ${totalQuestions} questions. Are you sure you want to submit?`);
+        }
+        return true;
+    }
+
+    // Pagination
+    function changePage(direction) {
+        const currentPageInput = document.getElementById('currentPage');
+        let currentPage = parseInt(currentPageInput.value);
+        const totalPages = Math.ceil(totalQuestions / 10);
+        const newPage = currentPage + direction;
+
+        if (newPage < 1 || newPage > totalPages) return;
+
+        document.querySelectorAll(`.question-page-${currentPage}`).forEach(el => el.classList.add('d-none'));
+        document.querySelectorAll(`.question-page-${newPage}`).forEach(el => el.classList.remove('d-none'));
+
+        currentPageInput.value = newPage;
+        updatePageInfo(newPage, totalPages);
+
+        document.getElementById('prevBtn').disabled = newPage === 1;
+        document.getElementById('nextBtn').disabled = newPage === totalPages;
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updatePageInfo(currentPage, totalPages) {
+        const start = (currentPage - 1) * 10 + 1;
+        const end = Math.min(currentPage * 10, totalQuestions);
+        document.getElementById('pageInfo').textContent = `(${start} - ${end})`;
+    }
+
+    // Timer
+    document.addEventListener('DOMContentLoaded', () => {
+        updatePageInfo(1, Math.ceil(totalQuestions / 10));
+        updateProgress();
+
+        if (@timeLimit > 0) {
+            let totalSeconds = @timeLimit * 60;
+            const timeDisplay = document.getElementById('timeDisplay');
+            const quizForm = document.getElementById('quizForm');
+
+            const timer = setInterval(() => {
+                let minutes = Math.floor(totalSeconds / 60);
+                let seconds = totalSeconds % 60;
+                timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+               document.getElementById('timeUsedSeconds').value = @timeLimit * 60 - totalSeconds;
+
+                if (totalSeconds <= 0) {
+                    clearInterval(timer);
+                    timeDisplay.textContent = "Time's Up!";
+                    timeDisplay.classList.add("text-danger");
+                    quizForm.submit();
+                }
+
+                totalSeconds--;
+            }, 1000);
+        }
+    });
+</script>
+
+<style>
+    .question-page.d-none {
+        display: none;
+    }
+</style>

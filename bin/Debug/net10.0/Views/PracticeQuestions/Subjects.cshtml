@@ -1,0 +1,97 @@
+﻿@model IEnumerable<AdamsScienceHub.Models.Subject>
+
+<div class="container py-4 user-practice-page">
+    <h2 class="practice-title">Practice Questions</h2>
+
+    <a asp-controller="Home" asp-action="UserDashboard" class="btn btn-secondary mb-3">
+        ← Back to Dashboard
+    </a>
+
+    <p class="practice-subtitle">Level Up yor Knowledge, Select a Subject to Start Practicing.</p>
+
+    <div class="row g-3 mt-3">
+        @foreach (var s in Model)
+        {
+            <div class="col-6 col-md-4 col-lg-3">
+                <a asp-action="Configure" asp-route-subjectId="@s.SubjectId" class="card subject-card p-3 text-center shadow-sm">
+                    <h5>@s.SubjectName</h5>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+
+    .practice-title {
+        color: #2c3e50;
+        font-weight: 670;
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        letter-spacing: -0.5px;
+    }
+
+    .practice-subtitle {
+        color: #7f8c8d;
+        font-size: 0.87rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: 500;
+        font-style: italic;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        border-left: 4px solid #3498db;
+        padding-left: 15px;
+        display: inline-block;
+        background: rgba(52, 152, 219, 0.1);
+        padding: 10px 20px;
+        border-radius: 10px;
+    }
+    /* Only targets this specific page */
+    .user-practice-page {
+        background-color: #ffffff;
+        color: #333333;
+    }
+
+        .user-practice-page .subject-card {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333333;
+        }
+
+            .user-practice-page .subject-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+                background: #007bff;
+                color: white;
+                text-decoration: none;
+            }
+
+            .user-practice-page .subject-card h5 {
+                margin: 0;
+                font-weight: 600;
+            }
+
+        .user-practice-page .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+            .user-practice-page .btn-secondary:hover {
+                background-color: #5a6268;
+                border-color: #545b62;
+            }
+
+        .user-practice-page h2 {
+            color: #333333;
+        }
+
+        .user-practice-page p {
+            color: #666666;
+        }
+</style>

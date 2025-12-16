@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Quiz Result";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <!-- Back button aligned to the left -->
+                    <div class="mb-3">
+                        <a asp-controller="PracticeQuestions" asp-action="Subjects" class="btn btn-outline-secondary btn-sm">
+                            ← Back
+                        </a>
+                    </div>
+
+                    <div class="text-center">
+                        <h2 class="card-title mb-3">Quiz Result</h2>
+
+                        <!-- Performance Message -->
+                        <h5 class="textperformance mb-4">@ViewBag.PerformanceMessage</h5>
+
+                        <!-- Score -->
+                        <h4 class="mb-3" style="font-weight: 600">SCORE</h4>
+
+                        <!-- Correct / Wrong -->
+                        <div class="d-flex justify-content-around mb-4">
+                            <div>
+                                <h6 class="text-success score-heading" style="font-weight: 570">Correct</h6>
+                                <p class="display-6">@ViewBag.CorrectCount</p>
+                            </div>
+                            <div>
+                                <h6 class="text-danger score-heading" style="font-weight: 570;">Wrong</h6>
+                                <p class="display-6">@ViewBag.WrongCount</p>
+                            </div>
+                        </div>
+
+                        <!-- Optional buttons -->
+                        <a asp-controller="PracticeQuestions" asp-action="Subjects" class="btn btn-primary btn-lg me-2">
+                            Practice Another Subject
+                        </a>
+                        <a asp-controller="PracticeQuestions"
+                           asp-action="Review"
+                           class="reviewbtn">
+                            Review Result
+                        </a>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: #f8f9fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+        border-radius: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .card-title {
+        font-weight: 700;
+    }
+
+    .display-6 {
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .textperformance {
+        color: #28a745 !important;
+        font-size: 14px;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+    }
+
+    @@media (max-width: 576px) {
+        .d-flex.justify-content-around {
+            flex-direction: column;
+            gap: 0.5rem !important; /* Reduced from 1rem to 0.5rem */
+        }
+    }
+
+    .btn-lg {
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .score-heading {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .reviewbtn {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+    }
+
+        .reviewbtn:hover {
+            background-color: #5a6268;
+            color: white;
+        }
+
+    @@media (max-width: 576px) {
+        .d-flex.justify-content-around {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+</style>

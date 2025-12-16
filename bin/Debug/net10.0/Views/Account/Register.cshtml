@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Register";
+    Layout = "_Layout";
+}
+
+<section class="auth-page d-flex flex-column justify-content-center align-items-center py-5">
+
+    <!-- Intro Note -->
+    <div class="register-note mb-4 text-center">
+        <p>
+            Register now to explore science subjects with ease and better understanding!
+            Access structured notes, practice questions, and smart learning tools.
+        </p>
+    </div>
+
+    <!-- Registration Card -->
+    <div class="card p-4 shadow-sm" style="max-width:400px; width:100%;">
+
+        <h2 class="text-center mb-4">Create an Account</h2>
+
+        <!-- ALERTS FOR ERRORS -->
+        @if (!ViewData.ModelState.IsValid || ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <form asp-action="Register" method="post">
+            <!-- Full Name -->
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="FullName" class="form-control" placeholder="John Doe" required />
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="Email" class="form-control" placeholder="example@email.com" required />
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="Password" class="form-control" placeholder="Enter password" required />
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="ConfirmPassword" class="form-control" placeholder="Re-enter password" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Already have an account? <a asp-action="Login" asp-controller="Account">Login</a>
+        </p>
+    </div>
+</section>

@@ -1,0 +1,52 @@
+﻿@model AdamsScienceHub.Models.Material
+@{
+    ViewData["Title"] = "Edit Material";
+}
+<div class="admin-container">
+    <div class="admin-greeting mb-4">
+        <h2>Edit Material</h2>
+    </div>
+
+    <form asp-controller="AdminMaterials" asp-action="Edit" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.MaterialId" />
+
+        <div class="mb-3">
+            <label>Subject</label>
+            <select name="SubjectId" class="form-control" required>
+                @foreach (var s in (ViewBag.Subjects as List<AdamsScienceHub.Models.Subject> ?? new List<AdamsScienceHub.Models.Subject>()))
+                {
+                    <option value="@s.SubjectId" selected="@(s.SubjectId == Model.SubjectId ? "selected" : null)">@s.SubjectName</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Topic Title</label>
+            <input type="text" name="TopicTitle" value="@Model.TopicTitle" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label>Current PDF</label>
+            <div>
+                @if (!string.IsNullOrEmpty(Model.FilePath))
+                {
+                    <a href="@Model.FilePath" target="_blank">Open current PDF</a>
+                }
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Replace PDF (optional)</label>
+            <input type="file" name="PdfFile" accept="application/pdf" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>Optional YouTube Link</label>
+            <input type="url" name="VideoUrl" value="@Model.VideoUrl" class="form-control" />
+        </div>
+
+        <button class="btn btn-add" type="submit">Save</button>
+        <a asp-controller="AdminMaterials" asp-action="ManageMaterials" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

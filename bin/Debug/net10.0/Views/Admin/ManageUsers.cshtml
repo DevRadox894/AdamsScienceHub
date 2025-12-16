@@ -1,0 +1,76 @@
+﻿@model IEnumerable<AdamsScienceHub.Models.User>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+
+    <!-- Greeting / Page Title -->
+    <div class="admin-container">
+        <!-- Greeting / Page Title -->
+        <div class="admin-greeting mb-4">
+            <h2>Manage Users</h2>
+
+            <!-- ADD BACK BUTTON HERE -->
+            <a asp-controller="Home" asp-action="AdminDashboard" class="btn btn-secondary mb-3">
+                ← Back to Dashboard
+            </a>
+
+            <p>View, edit, or delete users from your platform.</p>
+        </div>
+
+    <div class="mb-3 d-flex justify-content-center">
+        <div class="dashboard-card" style="
+        padding: 12px 20px;
+        background: #2a2a3d;
+        color: #00f0ff;
+        border-radius: 8px;
+        font-weight: bold;
+        text-align: left;
+        max-width: 220px; /* limits horizontal width */
+        width: 100%;
+    ">
+            Total Users: @ViewBag.TotalUsers
+        </div>
+    </div>
+
+
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+        <!-- Users Table -->
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>@user.Role</td>
+                        <td>
+                            <a class="btn btn-delete" href="@Url.Action("DeleteUser", "Admin", new { id = user.Id })"
+                               onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-center mt-4" style="color:#b0c4de;">No users or accounts available.</p>
+    }
+       
+</div>
