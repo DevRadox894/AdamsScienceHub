@@ -12,9 +12,7 @@ namespace AdamsScienceHub.Data
         public DbSet<Material> Materials { get; set; }
         public DbSet<UserSubjectProgress> UserSubjectProgress { get; set; }
         public DbSet<Question> Questions { get; set; }
-
         public DbSet<QuizResult> QuizResults { get; set; }
-
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -24,6 +22,24 @@ namespace AdamsScienceHub.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Material configuration
+            modelBuilder.Entity<Material>(entity =>
+            {
+                entity.HasKey(e => e.MaterialId);
+
+                // Configure MaterialId as identity (auto-increment)
+                entity.Property(e => e.MaterialId)
+                    .ValueGeneratedOnAdd()
+                    .UseIdentityByDefaultColumn();
+
+                // Relationship with Subject
+                entity.HasOne(m => m.Subject)
+                    .WithMany() // If Subject doesn't have Materials collection
+                    .HasForeignKey(m => m.SubjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Question configuration (your existing code)
             modelBuilder.Entity<Question>()
                 .HasOne(q => q.Subject)
                 .WithMany(s => s.Questions)

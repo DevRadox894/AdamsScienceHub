@@ -79,7 +79,9 @@ namespace AdamsScienceHub.Controllers
                 SubjectId = SubjectId,
                 TopicTitle = TopicTitle.Trim(),
                 FilePath = $"/materials/{fileName}",
-                VideoUrl = string.IsNullOrWhiteSpace(VideoUrl) ? null : VideoUrl.Trim()
+                VideoUrl = string.IsNullOrWhiteSpace(VideoUrl) ? null : VideoUrl.Trim(),
+                PageCount = 0, // ← ADDED: Default page count
+                UploadedAt = DateTime.UtcNow // ← ADDED: Set upload timestamp
             };
 
             _db.Materials.Add(material);
@@ -115,6 +117,7 @@ namespace AdamsScienceHub.Controllers
             material.SubjectId = SubjectId;
             material.TopicTitle = TopicTitle.Trim();
             material.VideoUrl = string.IsNullOrWhiteSpace(VideoUrl) ? null : VideoUrl.Trim();
+            material.UploadedAt = DateTime.UtcNow; // ← ADDED: Update timestamp on edit
 
             if (PdfFile != null && PdfFile.Length > 0)
             {
@@ -170,5 +173,6 @@ namespace AdamsScienceHub.Controllers
             }
             return RedirectToAction(nameof(ManageMaterials));
         }
+
     }
 }

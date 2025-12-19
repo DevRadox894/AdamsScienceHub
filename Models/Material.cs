@@ -6,6 +6,7 @@ namespace AdamsScienceHub.Models
     public class Material
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // ← ADD THIS LINE
         public int MaterialId { get; set; }
 
         [Required]
