@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Adams Science Hub</title>
+
+    <!-- Favicon -->
+    <!-- Favicons -->
+    <link rel="icon" href="~/FaviconFile/favicon_io/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="~/FaviconFile/favicon_io/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="~/FaviconFile/favicon_io/favicon-16x16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="~/FaviconFile/favicon_io/apple-touch-icon.png" />
+
+    <!-- Manifest -->
+    <link rel="manifest" href="~/FaviconFile/favicon_io/site.webmanifest" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <header>
+        <nav class="navbar navbar-light bg-white border-bottom shadow-sm mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    Adams Science E-Learning Library
+                </a>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer bg-dark text-light py-4 mt-5">
+        <div class="container d-flex justify-content-center">
+            <p class="mb-0">&copy; 2025 Adams Science Hub</p>
+        </div>
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

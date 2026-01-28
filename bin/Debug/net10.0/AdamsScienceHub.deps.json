@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v10.0": {
       "AdamsScienceHub/1.0.0": {
         "dependencies": {
+          "CloudinaryDotNet": "1.27.9",
           "MailKit": "4.14.1",
           "Microsoft.AspNetCore.DataProtection.EntityFrameworkCore": "10.0.1",
           "Microsoft.EntityFrameworkCore": "10.0.1",
@@ -24,6 +25,17 @@
           "lib/net6.0/BouncyCastle.Cryptography.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.6.1.59591"
+          }
+        }
+      },
+      "CloudinaryDotNet/1.27.9": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/CloudinaryDotNet.dll": {
+            "assemblyVersion": "1.27.9.0",
+            "fileVersion": "1.27.9.0"
           }
         }
       },
@@ -848,6 +860,13 @@
       "sha512": "sha512-vZsG2YILhthgRqO+ZVgRff4ZFKKTl0v7kqaVBLCtRvpREhfBP33pcWrdA3PRYgWuFL1RxiUFvjMUHTdBZlJcoA==",
       "path": "bouncycastle.cryptography/2.6.1",
       "hashPath": "bouncycastle.cryptography.2.6.1.nupkg.sha512"
+    },
+    "CloudinaryDotNet/1.27.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cQ3/+kHrA1SnwT6Bx6ZamJKKF/sb5Cl8uFAHTHpZ2HjdpfeCjSdfBRUA+aASOdbLGdL64jhLIEMaoWqXwAr9hQ==",
+      "path": "cloudinarydotnet/1.27.9",
+      "hashPath": "cloudinarydotnet.1.27.9.nupkg.sha512"
     },
     "Humanizer.Core/2.14.1": {
       "type": "package",

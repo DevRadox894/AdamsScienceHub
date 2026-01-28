@@ -1,0 +1,79 @@
+﻿@model IEnumerable<AdamsScienceHub.Models.Material>
+
+@{
+    var subject = ViewBag.Subject as AdamsScienceHub.Models.Subject;
+    ViewData["Title"] = "Explore " + (subject?.SubjectName ?? "Subject");
+}
+
+<div class="container py-4">
+    <div class="card p-4 mb-4 admin-greeting">
+        <a asp-controller="Home" asp-action="UserDashboard" class="back-btn">
+         ← Back
+        </a>
+
+
+        <h2>@subject!.SubjectName</h2>
+
+        <div class="d-flex gap-4 flex-wrap align-items-center">
+            <!-- 📅 Date -->
+            <div>📅 Date: <span id="currentDate">@DateTime.UtcNow.ToString("dd MMM yyyy")</span></div>
+
+            <!-- ⏱ Time Spent -->
+            <div>⏱ Time Spent: <span id="timeSpent">00:00:00</span></div>
+
+            <!-- 🕒 Current Time -->
+            <div>🕒 Current Time: <span id="currentTime">@DateTime.Now.ToString("hh:mm:ss tt")</span></div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        @if (!Model.Any())
+        {
+            <p>No topics found for this subject.</p>
+        }
+        else
+        {
+            @foreach (var m in Model)
+            {
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card p-3 dashboard-card text-center">
+                        <a asp-controller="Subjects" asp-action="Read" asp-route-id="@m.MaterialId"
+                           class="text-decoration-none text-dark">
+                            <h5>@m.TopicTitle</h5>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+                    const storageKey = 'appStartTime';
+
+        // Check if start time exists in sessionStorage
+        let startTime = sessionStorage.getItem(storageKey);
+        if (!startTime) {
+            startTime = Date.now(); // current timestamp in ms
+            sessionStorage.setItem(storageKey, startTime);
+        }
+
+        // Format HH:mm:ss
+        function formatTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hrs = Math.floor(totalSeconds / 3600);
+            const mins = Math.floor((totalSeconds % 3600) / 60);
+            const secs = totalSeconds % 60;
+            return `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        }
+
+        // Update timer every second
+        setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            document.getElementById('timeSpent').innerText = formatTime(elapsed);
+        }, 1000);
+
+    </script>
+    
+}

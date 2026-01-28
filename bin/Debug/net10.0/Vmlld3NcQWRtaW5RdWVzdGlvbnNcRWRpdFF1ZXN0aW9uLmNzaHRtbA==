@@ -1,0 +1,58 @@
+﻿@model AdamsScienceHub.Models.Question
+
+@{
+    ViewData["Title"] = "Edit Question";
+}
+<a asp-controller="AdminQuestions" asp-action="ManageQuestions" class="btn btn-secondary mb-3">
+    ← Back to Manage Questions
+</a>
+<h2>Edit Question</h2>
+
+<form asp-action="EditQuestion" method="post">
+    <input type="hidden" asp-for="QuestionId" />
+
+
+    <div class="mb-3">
+        <label class="form-label">Subject</label>
+        <select asp-for="SubjectId" asp-items="ViewBag.Subjects" class="form-select"></select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Question</label>
+        <textarea asp-for="QuestionText" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Option A</label>
+        <input asp-for="OptionA" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Option B</label>
+        <input asp-for="OptionB" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Option C</label>
+        <input asp-for="OptionC" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Option D</label>
+        <input asp-for="OptionD" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Correct Answer</label>
+        <select asp-for="CorrectAnswer" class="form-select">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+
+    <a asp-action="ManageQuestions" class="btn btn-secondary">Back</a>
+</form>

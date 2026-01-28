@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adams Science Hub</title>
+    <link rel="stylesheet" href="site.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Adams Science Hub</h1>
+            <p>Simplifying Science: Intelligent and Comprehensive Learning for Every Learner.</p>
+            <div class="buttons">
+                <a href="/Account/Register" class="btn register">Register</a>
+                <a href="/Account/Login" class="btn register">Login</a>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="/Images/Kris.jpg" alt="Science Illustration">
+        </div>
+
+
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about">
+        <h2>About Adams Science Hub</h2>
+        <p>
+            Adams Science Hub is a digital learning platform designed to make science study
+            simple, organized, and accessible for every student. It provides structured notes,
+            topic-based materials, practice questions, and smart tools to help learners prepare
+            effectively for school exams and national assessments.
+        </p>
+        <p class="founder"><strong>Founder:</strong> Adams Rasheed O.</p>
+    </section>
+ 
+    
+
+</body>
+</html>

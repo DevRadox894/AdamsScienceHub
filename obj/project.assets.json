@@ -15,6 +15,22 @@
           }
         }
       },
+      "CloudinaryDotNet/1.27.9": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/CloudinaryDotNet.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/CloudinaryDotNet.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -930,7 +946,7 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
             "related": ".xml"
           }
         },
@@ -1404,6 +1420,25 @@
         "lib/netstandard2.0/BouncyCastle.Cryptography.dll",
         "lib/netstandard2.0/BouncyCastle.Cryptography.xml",
         "packageIcon.png"
+      ]
+    },
+    "CloudinaryDotNet/1.27.9": {
+      "sha512": "cQ3/+kHrA1SnwT6Bx6ZamJKKF/sb5Cl8uFAHTHpZ2HjdpfeCjSdfBRUA+aASOdbLGdL64jhLIEMaoWqXwAr9hQ==",
+      "type": "package",
+      "path": "cloudinarydotnet/1.27.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "CloudinaryIcon.png",
+        "README.md",
+        "cloudinarydotnet.1.27.9.nupkg.sha512",
+        "cloudinarydotnet.nuspec",
+        "lib/net452/CloudinaryDotNet.dll",
+        "lib/net452/CloudinaryDotNet.xml",
+        "lib/netstandard1.3/CloudinaryDotNet.dll",
+        "lib/netstandard1.3/CloudinaryDotNet.xml",
+        "lib/netstandard2.0/CloudinaryDotNet.dll",
+        "lib/netstandard2.0/CloudinaryDotNet.xml"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -3476,6 +3511,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "CloudinaryDotNet >= 1.27.9",
       "MailKit >= 4.14.1",
       "Microsoft.AspNetCore.DataProtection.EntityFrameworkCore >= 10.0.1",
       "Microsoft.EntityFrameworkCore >= 10.0.1",
@@ -3535,6 +3571,10 @@
       "net10.0": {
         "targetAlias": "net10.0",
         "dependencies": {
+          "CloudinaryDotNet": {
+            "target": "Package",
+            "version": "[1.27.9, )"
+          },
           "MailKit": {
             "target": "Package",
             "version": "[4.14.1, )"

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using CloudinaryDotNet;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,16 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
     });
 
+// 🔥 Cloudinary integration
+var cloudinarySettings = builder.Configuration.GetSection("Cloudinary");
+Account account = new Account(
+    cloudinarySettings["CloudName"],
+    cloudinarySettings["ApiKey"],
+    cloudinarySettings["ApiSecret"]
+);
+Cloudinary cloudinary = new Cloudinary(account);
+builder.Services.AddSingleton(cloudinary);
+
 var app = builder.Build();
 
 // Middleware
@@ -68,16 +79,15 @@ app.Urls.Clear();
 app.Urls.Add($"http://0.0.0.0:{port}");
 
 // Run migrations ONLY in Development
-if (app.Environment.IsDevelopment())
-{
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
+// Run migrations
+using var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
 
-    db.Database.Migrate();
-    keyDb.Database.Migrate();
+db.Database.Migrate();
+keyDb.Database.Migrate();
 
-    DbSeeder.SeedAdmin(db);
-}
+DbSeeder.SeedAdmin(db);
+
 
 app.Run();

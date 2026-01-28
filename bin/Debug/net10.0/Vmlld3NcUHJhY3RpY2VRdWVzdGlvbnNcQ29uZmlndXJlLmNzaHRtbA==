@@ -1,0 +1,114 @@
+﻿@{
+    var subject = ViewBag.Subject;
+}
+
+<div class="container py-4">
+    <h3 class="quiz-config-title">Configure Quiz – @subject.SubjectName</h3>
+
+    <a asp-controller="PracticeQuestions" asp-action="Subjects" class="btn btn-secondary mb-3">
+        ← Back
+    </a>
+
+    <form method="post" asp-action="StartQuiz" class="quiz-config-form">
+        <input type="hidden" name="subjectId" value="@subject.SubjectId" />
+
+        <div class="form-group mt-4">
+            <label class="form-label">Time Limit:</label>
+            <select name="limit" class="form-control">
+                <option value="10">10 Minutes</option>
+                <option value="15">15 Minutes</option>
+                <option value="45">45 Minutes</option>
+                <option value="60">1 Hour</option>
+            </select>
+        </div>
+
+        <div class="form-group mt-4">
+            <label class="form-label">Number of Questions:</label>
+            <select name="count" class="form-control">
+                <option value="10">10 Questions</option>
+                <option value="15">15 Questions</option>
+                <option value="25">25 Questions</option>
+                <option value="30">30 Questions</option>
+                <option value="50">50 Questions</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary mt-4 start-quiz-btn">Start Quiz</button>
+    </form>
+</div>
+
+<style>
+    .quiz-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.6rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .quiz-config-title {
+        color: #2c3e50;
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin: 0;
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+      
+    }
+
+    @@media (max-width: 768px) {
+        .quiz-header {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .quiz-config-title {
+            font-size: 1.5rem;
+        }
+    }
+
+    .quiz-config-form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    .start-quiz-btn {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+        .start-quiz-btn:hover {
+            background-color: #0056b3;
+        }
+</style>

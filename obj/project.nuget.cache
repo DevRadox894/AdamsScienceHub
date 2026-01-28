@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "dKaW9i0io38=",
+  "dgSpecHash": "uvah4Ou7FhI=",
   "success": true,
   "projectFilePath": "C:\\Users\\Sober\\source\\repos\\AdamsScienceHub\\AdamsScienceHub\\AdamsScienceHub.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sober\\.nuget\\packages\\bouncycastle.cryptography\\2.6.1\\bouncycastle.cryptography.2.6.1.nupkg.sha512",
+    "C:\\Users\\Sober\\.nuget\\packages\\cloudinarydotnet\\1.27.9\\cloudinarydotnet.1.27.9.nupkg.sha512",
     "C:\\Users\\Sober\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Sober\\.nuget\\packages\\mailkit\\4.14.1\\mailkit.4.14.1.nupkg.sha512",
     "C:\\Users\\Sober\\.nuget\\packages\\microsoft.aspnetcore.dataprotection.entityframeworkcore\\10.0.1\\microsoft.aspnetcore.dataprotection.entityframeworkcore.10.0.1.nupkg.sha512",

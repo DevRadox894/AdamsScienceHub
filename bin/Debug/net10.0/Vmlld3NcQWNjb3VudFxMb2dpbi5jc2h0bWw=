@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+}
+
+<section class="auth-page d-flex flex-column justify-content-center align-items-center py-5">
+
+    <!-- Intro Note -->
+    <div class="login-note mb-4 text-center">
+        <p>
+            Welcome back! Log in to continue exploring science subjects, practice questions, and interactive study materials.
+        </p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="card p-4 shadow-sm" style="max-width:400px; width:100%;">
+
+        <h2 class="text-center mb-4">Login to Your Account</h2>
+
+        <!-- ALERTS FOR ERRORS -->
+        @if (!ViewData.ModelState.IsValid || ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+       
+        <form asp-action="Login" asp-controller="Account" method="post">
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+                <label>Email</label>
+                <input type="email" name="Email" class="form-control" placeholder= "example@gmail.com" required />
+            </div>
+      
+            <div class="mb-3">
+                <label>Password</label>
+                <input type="password" name="Password" class="form-control" placeholderm="Password" required />
+            </div>
+         
+            <div class="mb-3 form-check">
+                <input type="checkbox" name="RememberMe" class="form-check-input" />
+                <label class="form-check-label">Remember Me</label>
+            </div>
+          
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+         
+
+        <p class="text-center mt-3">
+            Don't have an account? <a asp-action="Register" asp-controller="Account">Register here</a>
+        </p>
+    </div>
+</section>

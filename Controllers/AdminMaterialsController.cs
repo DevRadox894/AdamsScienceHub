@@ -7,19 +7,20 @@ using AdamsScienceHub.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace AdamsScienceHub.Controllers
 {
     public class AdminMaterialsController : Controller
     {
         private readonly ApplicationDbContext _db;
-        private readonly string _materialsFolder = Path.Combine("wwwroot", "materials");
+        private readonly Cloudinary _cloudinary;
 
-        public AdminMaterialsController(ApplicationDbContext db)
+        public AdminMaterialsController(ApplicationDbContext db, Cloudinary cloudinary)
         {
             _db = db;
-            if (!Directory.Exists(_materialsFolder))
-                Directory.CreateDirectory(_materialsFolder);
+            _cloudinary = cloudinary;
         }
 
         // GET: /AdminMaterials/ManageMaterials
@@ -27,7 +28,7 @@ namespace AdamsScienceHub.Controllers
         {
             var items = await _db.Materials
                 .Include(m => m.Subject)
-                .OrderBy(m => m.UploadedAt) // oldest first
+                .OrderBy(m => m.UploadedAt)
                 .ToListAsync();
             return View(items);
         }
@@ -58,7 +59,6 @@ namespace AdamsScienceHub.Controllers
                 return View();
             }
 
-            // Validate PDF only
             var ext = Path.GetExtension(PdfFile.FileName).ToLowerInvariant();
             if (ext != ".pdf")
             {
@@ -67,21 +67,23 @@ namespace AdamsScienceHub.Controllers
                 return View();
             }
 
-            var fileName = $"{Guid.NewGuid()}{ext}";
-            var savePath = Path.Combine(_materialsFolder, fileName);
-            using (var fs = new FileStream(savePath, FileMode.Create))
+            // Upload PDF to Cloudinary
+            var uploadParams = new RawUploadParams
             {
-                await PdfFile.CopyToAsync(fs);
-            }
+                File = new FileDescription(PdfFile.FileName, PdfFile.OpenReadStream()),
+                Folder = "materials"
+                // ResourceType is automatically Raw, do not assign
+            };
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
             var material = new Material
             {
                 SubjectId = SubjectId,
                 TopicTitle = TopicTitle.Trim(),
-                FilePath = $"/materials/{fileName}",
+                FilePath = uploadResult.SecureUrl.ToString(),
                 VideoUrl = string.IsNullOrWhiteSpace(VideoUrl) ? null : VideoUrl.Trim(),
-                PageCount = 0, // ← ADDED: Default page count
-                UploadedAt = DateTime.UtcNow // ← ADDED: Set upload timestamp
+                PageCount = 0,
+                UploadedAt = DateTime.UtcNow
             };
 
             _db.Materials.Add(material);
@@ -117,7 +119,7 @@ namespace AdamsScienceHub.Controllers
             material.SubjectId = SubjectId;
             material.TopicTitle = TopicTitle.Trim();
             material.VideoUrl = string.IsNullOrWhiteSpace(VideoUrl) ? null : VideoUrl.Trim();
-            material.UploadedAt = DateTime.UtcNow; // ← ADDED: Update timestamp on edit
+            material.UploadedAt = DateTime.UtcNow;
 
             if (PdfFile != null && PdfFile.Length > 0)
             {
@@ -129,21 +131,22 @@ namespace AdamsScienceHub.Controllers
                     return View(material);
                 }
 
-                // Delete old file
+                // Delete old PDF from Cloudinary
                 if (!string.IsNullOrEmpty(material.FilePath))
                 {
-                    var old = material.FilePath.StartsWith("/") ? material.FilePath.TrimStart('/') : material.FilePath;
-                    var fullOld = Path.Combine(Directory.GetCurrentDirectory(), old);
-                    if (System.IO.File.Exists(fullOld)) System.IO.File.Delete(fullOld);
+                    var publicId = Path.GetFileNameWithoutExtension(new Uri(material.FilePath).LocalPath);
+                    await _cloudinary.DestroyAsync(new DeletionParams(publicId));
                 }
 
-                var fileName = $"{Guid.NewGuid()}{ext}";
-                var savePath = Path.Combine(_materialsFolder, fileName);
-                using (var fs = new FileStream(savePath, FileMode.Create))
+                // Upload new PDF
+                var uploadParams = new RawUploadParams
                 {
-                    await PdfFile.CopyToAsync(fs);
-                }
-                material.FilePath = $"/materials/{fileName}";
+                    File = new FileDescription(PdfFile.FileName, PdfFile.OpenReadStream()),
+                    Folder = "materials"
+                    // ResourceType is automatically Raw
+                };
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                material.FilePath = uploadResult.SecureUrl.ToString();
             }
 
             _db.Materials.Update(material);
@@ -160,12 +163,11 @@ namespace AdamsScienceHub.Controllers
             var material = await _db.Materials.FindAsync(id);
             if (material != null)
             {
-                // delete file
+                // Delete PDF from Cloudinary
                 if (!string.IsNullOrEmpty(material.FilePath))
                 {
-                    var path = material.FilePath.StartsWith("/") ? material.FilePath.TrimStart('/') : material.FilePath;
-                    var full = Path.Combine(Directory.GetCurrentDirectory(), path);
-                    if (System.IO.File.Exists(full)) System.IO.File.Delete(full);
+                    var publicId = Path.GetFileNameWithoutExtension(new Uri(material.FilePath).LocalPath);
+                    await _cloudinary.DestroyAsync(new DeletionParams(publicId));
                 }
 
                 _db.Materials.Remove(material);
@@ -173,6 +175,5 @@ namespace AdamsScienceHub.Controllers
             }
             return RedirectToAction(nameof(ManageMaterials));
         }
-
     }
 }

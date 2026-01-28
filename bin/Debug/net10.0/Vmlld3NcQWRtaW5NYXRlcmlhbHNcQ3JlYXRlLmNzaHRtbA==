@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Add Material";
+}
+<div class="admin-container">
+    <div class="admin-greeting mb-4">
+        <h2>Add Material</h2>
+    </div>
+
+    <form asp-controller="AdminMaterials" asp-action="Create" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label>Subject</label>
+            <select name="SubjectId" class="form-control" required>
+                <option value="">-- select subject --</option>
+                @foreach (var s in (ViewBag.Subjects as List<AdamsScienceHub.Models.Subject> ?? new List<AdamsScienceHub.Models.Subject>()))
+                {
+                    <option value="@s.SubjectId">@s.SubjectName</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Topic Title</label>
+            <input type="text" name="TopicTitle" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label>PDF (only)</label>
+            <input type="file" name="PdfFile" accept="application/pdf" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label>Optional YouTube Link</label>
+            <input type="url" name="VideoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=..." />
+        </div>
+
+        <button class="btn btn-add" type="submit">Create</button>
+        <a asp-controller="AdminMaterials" asp-action="ManageMaterials" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
