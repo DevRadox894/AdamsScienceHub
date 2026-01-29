@@ -78,16 +78,19 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 app.Urls.Clear();
 app.Urls.Add($"http://0.0.0.0:{port}");
 
-// Run migrations ONLY in Development
 // Run migrations
-using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
 
-db.Database.Migrate();
-keyDb.Database.Migrate();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
 
-DbSeeder.SeedAdmin(db);
+    db.Database.Migrate();
+    keyDb.Database.Migrate();
+
+    DbSeeder.SeedAdmin(db);
+}
 
 
 app.Run();
