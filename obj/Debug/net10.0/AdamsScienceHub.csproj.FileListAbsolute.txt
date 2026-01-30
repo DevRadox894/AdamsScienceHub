@@ -465,3 +465,4 @@ C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\Ad
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\AdamsScienceHub.genruntimeconfig.cache
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\ref\AdamsScienceHub.dll
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net10.0\CloudinaryDotNet.dll
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

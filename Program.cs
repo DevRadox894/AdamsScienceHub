@@ -19,12 +19,22 @@ builder.Services.AddSession(options =>
 });
 
 // PostgreSQL — Main App DB
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// PostgreSQL — Data Protection Keys (same DB)
-builder.Services.AddDbContext<DataProtectionKeyContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    builder.Services.AddDbContext<DataProtectionKeyContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("DataProtectionKeyContext")));
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    builder.Services.AddDbContext<DataProtectionKeyContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DataProtectionKeyContext")));
+}
 
 // Persist Data Protection keys in PostgreSQL
 builder.Services.AddDataProtection()
