@@ -1,8 +1,8 @@
 ﻿using AdamsScienceHub.Data;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
-using CloudinaryDotNet;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,18 +88,19 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 app.Urls.Clear();
 app.Urls.Add($"http://0.0.0.0:{port}");
 
-// Run migrations for both Development and Production
-using (var scope = app.Services.CreateScope())
+// Run migrations
+if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.CreateScope();
+
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
 
-    // Apply all pending migrations
     db.Database.Migrate();
     keyDb.Database.Migrate();
 
-    // Seed admin user (only if not already exists)
     DbSeeder.SeedAdmin(db);
 }
+
 
 app.Run();
