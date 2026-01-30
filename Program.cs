@@ -89,31 +89,17 @@ app.Urls.Clear();
 app.Urls.Add($"http://0.0.0.0:{port}");
 
 // Run migrations
-// -----------------------------
-// Apply migrations & seed DB
-// -----------------------------
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.CreateScope();
+
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
 
-    try
-    {
-        // Apply any pending migrations (dev or production)
-        db.Database.Migrate();
-        keyDb.Database.Migrate();
+    db.Database.Migrate();
+    keyDb.Database.Migrate();
 
-        // Seed the admin user
-        DbSeeder.SeedAdmin(db);
-
-        Console.WriteLine("Database migrations applied and admin seeded successfully.");
-    }
-    catch (Exception ex)
-    {
-        // Log the error (you can replace with a proper logger)
-        Console.WriteLine("Error during database migration/seeding: " + ex.Message);
-        throw; // Stop app startup if DB failed
-    }
+    DbSeeder.SeedAdmin(db);
 }
 
 
