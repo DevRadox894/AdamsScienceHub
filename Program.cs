@@ -88,19 +88,18 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 app.Urls.Clear();
 app.Urls.Add($"http://0.0.0.0:{port}");
 
-// Run migrations
-if (app.Environment.IsDevelopment())
+// Run migrations for both Development and Production
+using (var scope = app.Services.CreateScope())
 {
-    using var scope = app.Services.CreateScope();
-
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
 
+    // Apply all pending migrations
     db.Database.Migrate();
     keyDb.Database.Migrate();
 
+    // Seed admin user (only if not already exists)
     DbSeeder.SeedAdmin(db);
 }
-
 
 app.Run();
