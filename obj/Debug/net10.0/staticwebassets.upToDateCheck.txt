@@ -94,8 +94,8 @@ wwwroot\subjects\a6138e0b-ba25-4bda-9b04-994406c516ab.png
 wwwroot\subjects\c62ad389-9fcc-4d12-82ef-cba0828c1b01.png
 wwwroot\subjects\eaa033b3-bc69-4c1c-87bb-1ecc2434fb21.jpg
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\css\site.css
-C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\FaviconFile\favicon_io\favicon.ico
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\FaviconFile\favicon_io\site.webmanifest
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\FaviconFile\favicon_io\favicon.ico
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\js\site.js
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map

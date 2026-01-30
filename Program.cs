@@ -89,17 +89,16 @@ app.Urls.Clear();
 app.Urls.Add($"http://0.0.0.0:{port}");
 
 // Run migrations
-// Always run migrations and seed
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.CreateScope();
+
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
 
-    // Create all tables in Postgres if they don't exist
     db.Database.Migrate();
     keyDb.Database.Migrate();
 
-    // Seed admin safely
     DbSeeder.SeedAdmin(db);
 }
 

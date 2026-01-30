@@ -389,7 +389,6 @@ C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\sc
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\scopedcss\bundle\AdamsScienceHub.styles.css
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\scopedcss\projectbundle\AdamsScienceHub.bundle.scp.css
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\n14uazrawt-{0}-wgffne0pgg-wgffne0pgg.gz
-C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\9bdxixz1at-{0}-9dp4vqddze-9dp4vqddze.gz
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\54d6jbdsmv-{0}-6sx6pifph3-6sx6pifph3.gz
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\l0jls9kr1a-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\zg6owyills-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -466,3 +465,4 @@ C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\Ad
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\ref\AdamsScienceHub.dll
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net10.0\CloudinaryDotNet.dll
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\9bdxixz1at-{0}-uiqwg83vn1-uiqwg83vn1.gz
