@@ -135,17 +135,37 @@ public class AdminSubjectController : Controller
     }
 
     // Helper: Upload image to Cloudinary
-    private async Task<string> UploadToCloudinary(IFormFile file)
+    private async Task<string?> UploadToCloudinary(IFormFile file)
     {
-        using var stream = file.OpenReadStream();
-        var uploadParams = new ImageUploadParams
+        try
         {
-            File = new FileDescription(file.FileName, stream),
-            Folder = "subjects" // optional folder in Cloudinary
-        };
-        var result = await _cloudinary.UploadAsync(uploadParams);
-        return result.SecureUrl.ToString();
+            using var stream = file.OpenReadStream();
+            var uploadParams = new ImageUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                Folder = "subjects"
+            };
+            var result = await _cloudinary.UploadAsync(uploadParams);
+
+            if (result.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                throw new Exception(result.Error?.Message ?? "Cloudinary upload failed");
+            }
+
+            return result.SecureUrl.ToString();
+        }
+        catch (Exception ex)
+        {
+            // Log error to console or database
+            Console.WriteLine("Cloudinary upload error: " + ex.Message);
+
+            // Optionally show a friendly message to the user
+            TempData["UploadError"] = "Failed to upload image. Please try again.";
+
+            return null; // prevent crash
+        }
     }
+
 
     // Helper: Delete image from Cloudinary
     private async Task DeleteFromCloudinary(string imageUrl)
