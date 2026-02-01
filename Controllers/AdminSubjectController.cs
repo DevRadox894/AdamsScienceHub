@@ -14,13 +14,11 @@ public class AdminSubjectController : Controller
     private readonly ApplicationDbContext _db;
     private readonly Cloudinary _cloudinary;
 
-
     public AdminSubjectController(ApplicationDbContext db, Cloudinary cloudinary)
     {
         _db = db;
         _cloudinary = cloudinary;
     }
-
 
     // GET: /AdminSubject/ManageSubjects
     public async Task<IActionResult> ManageSubjects()
@@ -40,25 +38,30 @@ public class AdminSubjectController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(string SubjectName, IFormFile ImageFile)
     {
+        // Validation
         if (string.IsNullOrWhiteSpace(SubjectName))
-        {
             ModelState.AddModelError(nameof(SubjectName), "Subject name is required.");
+
+        if (ImageFile == null || ImageFile.Length == 0)
+            ModelState.AddModelError(nameof(ImageFile), "Image is required.");
+
+        if (!ModelState.IsValid)
             return View();
-        }
 
         var subject = new Subject
         {
             SubjectName = SubjectName.Trim()
         };
 
-        if (ImageFile != null && ImageFile.Length > 0)
+        // Upload image to Cloudinary
+        var uploadResult = await UploadToCloudinary(ImageFile!);
+        if (uploadResult == null)
         {
-            var uploadResult = await UploadToCloudinary(ImageFile);
-            if (uploadResult != null)
-            {
-                subject.ImagePath = uploadResult;
-            }
+            ModelState.AddModelError(nameof(ImageFile), "Failed to upload image. Please try again.");
+            return View();
         }
+
+        subject.ImagePath = uploadResult;
 
         _db.Subjects.Add(subject);
         await _db.SaveChangesAsync();
@@ -85,27 +88,34 @@ public class AdminSubjectController : Controller
         if (subject == null)
             return NotFound();
 
+        // Validation
         if (string.IsNullOrWhiteSpace(SubjectName))
-        {
             ModelState.AddModelError(nameof(SubjectName), "Subject name is required.");
+
+        if (ImageFile == null && string.IsNullOrEmpty(subject.ImagePath))
+            ModelState.AddModelError(nameof(ImageFile), "Image is required.");
+
+        if (!ModelState.IsValid)
             return View(subject);
-        }
 
         subject.SubjectName = SubjectName.Trim();
 
+        // Replace image if new image is uploaded
         if (ImageFile != null && ImageFile.Length > 0)
         {
-            // Optional: delete old image from Cloudinary
             if (!string.IsNullOrEmpty(subject.ImagePath))
             {
                 await DeleteFromCloudinary(subject.ImagePath);
             }
 
             var uploadResult = await UploadToCloudinary(ImageFile);
-            if (uploadResult != null)
+            if (uploadResult == null)
             {
-                subject.ImagePath = uploadResult;
+                ModelState.AddModelError(nameof(ImageFile), "Failed to upload image. Please try again.");
+                return View(subject);
             }
+
+            subject.ImagePath = uploadResult;
         }
 
         _db.Subjects.Update(subject);
@@ -137,22 +147,22 @@ public class AdminSubjectController : Controller
     // Helper: Upload image to Cloudinary
     private async Task<string?> UploadToCloudinary(IFormFile file)
     {
+      
         try
         {
+            
             using var stream = file.OpenReadStream();
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, stream),
                 Folder = "subjects"
             };
-            var result = await _cloudinary.UploadAsync(uploadParams);
 
+            var result = await _cloudinary.UploadAsync(uploadParams);
             Console.WriteLine($"Cloudinary result: Status={result.StatusCode}, Error={result.Error?.Message}");
 
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
-            {
                 throw new Exception(result.Error?.Message ?? "Cloudinary upload failed");
-            }
 
             return result.SecureUrl.ToString();
         }
@@ -163,8 +173,6 @@ public class AdminSubjectController : Controller
             return null;
         }
     }
-
-
 
     // Helper: Delete image from Cloudinary
     private async Task DeleteFromCloudinary(string imageUrl)
@@ -177,7 +185,7 @@ public class AdminSubjectController : Controller
         }
         catch
         {
-            // ignore errors if deletion fails
+            // ignore deletion errors
         }
     }
 }
