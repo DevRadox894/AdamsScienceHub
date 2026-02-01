@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>ca04a552-330e-4d30-9ed0-552984afc44b</UserSecretsId>
-		<StartupObject>HashGenerator</StartupObject>
+		<StartupObject></StartupObject>
 	</PropertyGroup>
 
 	<ItemGroup>
