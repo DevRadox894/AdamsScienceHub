@@ -127,30 +127,11 @@ public class AdminSubjectController : Controller
     // POST: /AdminSubject/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var subject = await _db.Subjects.FindAsync(id);
-        if (subject != null)
-        {
-            if (!string.IsNullOrEmpty(subject.ImagePath))
-            {
-                await DeleteFromCloudinary(subject.ImagePath);
-            }
-
-            _db.Subjects.Remove(subject);
-            await _db.SaveChangesAsync();
-        }
-
-        return RedirectToAction(nameof(ManageSubjects));
-    }
-
-    // Helper: Upload image to Cloudinary
     private async Task<string?> UploadToCloudinary(IFormFile file)
     {
-      
         try
         {
-            
+            Console.WriteLine($"Attempting upload: {file.FileName} ({file.Length} bytes)");
             using var stream = file.OpenReadStream();
             var uploadParams = new ImageUploadParams
             {
@@ -159,20 +140,23 @@ public class AdminSubjectController : Controller
             };
 
             var result = await _cloudinary.UploadAsync(uploadParams);
-            Console.WriteLine($"Cloudinary result: Status={result.StatusCode}, Error={result.Error?.Message}");
+            Console.WriteLine("Cloudinary result: " + Newtonsoft.Json.JsonConvert.SerializeObject(result));
 
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new Exception(result.Error?.Message ?? "Cloudinary upload failed");
+            {
+                throw new Exception(result.Error?.Message ?? "Upload failed");
+            }
 
             return result.SecureUrl.ToString();
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Cloudinary upload error: " + ex.Message);
-            TempData["UploadError"] = "Failed to upload image. Please try again.";
+            Console.WriteLine("Cloudinary upload error: " + ex);
+            TempData["UploadError"] = $"Failed to upload image: {ex.Message}";
             return null;
         }
     }
+
 
     // Helper: Delete image from Cloudinary
     private async Task DeleteFromCloudinary(string imageUrl)
