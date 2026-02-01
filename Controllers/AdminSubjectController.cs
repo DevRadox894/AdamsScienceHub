@@ -147,6 +147,8 @@ public class AdminSubjectController : Controller
             };
             var result = await _cloudinary.UploadAsync(uploadParams);
 
+            Console.WriteLine($"Cloudinary result: Status={result.StatusCode}, Error={result.Error?.Message}");
+
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exception(result.Error?.Message ?? "Cloudinary upload failed");
@@ -156,15 +158,12 @@ public class AdminSubjectController : Controller
         }
         catch (Exception ex)
         {
-            // Log error to console or database
             Console.WriteLine("Cloudinary upload error: " + ex.Message);
-
-            // Optionally show a friendly message to the user
             TempData["UploadError"] = "Failed to upload image. Please try again.";
-
-            return null; // prevent crash
+            return null;
         }
     }
+
 
 
     // Helper: Delete image from Cloudinary
