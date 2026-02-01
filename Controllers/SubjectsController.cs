@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AdamsScienceHub.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdamsScienceHub.Controllers
@@ -44,11 +45,26 @@ namespace AdamsScienceHub.Controllers
                 .ToListAsync();
 
             var index = siblings.FindIndex(x => x.MaterialId == material.MaterialId);
+            if (index == -1) return NotFound();
 
             ViewBag.Siblings = siblings;
             ViewBag.Index = index;
             return View(material);
         }
+
+        // GET: /Subjects/Pdf/{materialId}
+        public async Task<IActionResult> Pdf(int id)
+        {
+            var material = await _db.Materials.FindAsync(id);
+            if (material == null || string.IsNullOrEmpty(material.FilePath))
+                return NotFound();
+
+            using var http = new HttpClient();
+            var pdfBytes = await http.GetByteArrayAsync(material.FilePath);
+
+            return File(pdfBytes, "application/pdf");
+        }
+
 
         // POST: /Subjects/RecordTime  (AJAX)
         [HttpPost]

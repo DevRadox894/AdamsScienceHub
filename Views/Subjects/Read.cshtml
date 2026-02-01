@@ -75,7 +75,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.worker.min.js"></script>
 
     <script>
-        const url = '@Model.FilePath';
+     
+       const url = '/Subjects/Pdf/@Model.MaterialId';
+
         let pdfDoc = null, pageNum = 1, pageCount = 0;
         const canvas = document.getElementById('pdf-render');
         const ctx = canvas.getContext('2d');
