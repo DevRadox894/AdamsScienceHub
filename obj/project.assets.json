@@ -15,7 +15,7 @@
           }
         }
       },
-      "CloudinaryDotNet/1.27.9": {
+      "CloudinaryDotNet/1.28.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "13.0.3"
@@ -1422,16 +1422,16 @@
         "packageIcon.png"
       ]
     },
-    "CloudinaryDotNet/1.27.9": {
-      "sha512": "cQ3/+kHrA1SnwT6Bx6ZamJKKF/sb5Cl8uFAHTHpZ2HjdpfeCjSdfBRUA+aASOdbLGdL64jhLIEMaoWqXwAr9hQ==",
+    "CloudinaryDotNet/1.28.0": {
+      "sha512": "o5Dfp5DrpF69s8qjlh4dxzXuJUCRxt7KQaweU8wMDxd1cPFONCVNZsgFQZ3v0PZDN76fLonZ5vFDjVTA3UTjCA==",
       "type": "package",
-      "path": "cloudinarydotnet/1.27.9",
+      "path": "cloudinarydotnet/1.28.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "CloudinaryIcon.png",
         "README.md",
-        "cloudinarydotnet.1.27.9.nupkg.sha512",
+        "cloudinarydotnet.1.28.0.nupkg.sha512",
         "cloudinarydotnet.nuspec",
         "lib/net452/CloudinaryDotNet.dll",
         "lib/net452/CloudinaryDotNet.xml",
@@ -3511,7 +3511,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "CloudinaryDotNet >= 1.27.9",
+      "CloudinaryDotNet >= 1.28.0",
       "MailKit >= 4.14.1",
       "Microsoft.AspNetCore.DataProtection.EntityFrameworkCore >= 10.0.1",
       "Microsoft.EntityFrameworkCore >= 10.0.1",
@@ -3573,7 +3573,7 @@
         "dependencies": {
           "CloudinaryDotNet": {
             "target": "Package",
-            "version": "[1.27.9, )"
+            "version": "[1.28.0, )"
           },
           "MailKit": {
             "target": "Package",

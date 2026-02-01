@@ -4,6 +4,8 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>ca04a552-330e-4d30-9ed0-552984afc44b</UserSecretsId>
+		<StartupObject>HashGenerator</StartupObject>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,7 +22,7 @@
 
 	<ItemGroup>
 		<!-- Packages -->
-		<PackageReference Include="CloudinaryDotNet" Version="1.27.9" />
+		<PackageReference Include="CloudinaryDotNet" Version="1.28.0" />
 		<PackageReference Include="MailKit" Version="4.14.1" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />

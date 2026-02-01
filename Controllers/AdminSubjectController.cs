@@ -3,6 +3,9 @@ using AdamsScienceHub.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -10,22 +13,21 @@ using System.Threading.Tasks;
 public class AdminSubjectController : Controller
 {
     private readonly ApplicationDbContext _db;
-    private readonly string _subjectsFolder;
+    private readonly Cloudinary _cloudinary;
 
-    public AdminSubjectController(ApplicationDbContext db)
+    public AdminSubjectController(ApplicationDbContext db, IConfiguration config)
     {
         _db = db;
 
-        _subjectsFolder = Path.Combine(
-            Directory.GetCurrentDirectory(),
-            "wwwroot",
-            "subjects"
+        // Configure Cloudinary
+        var account = new Account(
+            config["CloudinarySettings:CloudName"],
+            config["CloudinarySettings:ApiKey"],
+            config["CloudinarySettings:ApiSecret"]
         );
 
-        if (!Directory.Exists(_subjectsFolder))
-        {
-            Directory.CreateDirectory(_subjectsFolder);
-        }
+        _cloudinary = new Cloudinary(account);
+        _cloudinary.Api.Secure = true;
     }
 
     // GET: /AdminSubject/ManageSubjects
@@ -59,15 +61,11 @@ public class AdminSubjectController : Controller
 
         if (ImageFile != null && ImageFile.Length > 0)
         {
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(ImageFile.FileName)}";
-            var savePath = Path.Combine(_subjectsFolder, fileName);
-
-            using (var fs = new FileStream(savePath, FileMode.Create))
+            var uploadResult = await UploadToCloudinary(ImageFile);
+            if (uploadResult != null)
             {
-                await ImageFile.CopyToAsync(fs);
+                subject.ImagePath = uploadResult;
             }
-
-            subject.ImagePath = $"/subjects/{fileName}";
         }
 
         _db.Subjects.Add(subject);
@@ -105,29 +103,17 @@ public class AdminSubjectController : Controller
 
         if (ImageFile != null && ImageFile.Length > 0)
         {
+            // Optional: delete old image from Cloudinary
             if (!string.IsNullOrEmpty(subject.ImagePath))
             {
-                var oldPath = subject.ImagePath.TrimStart('/');
-                var fullOldPath = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    oldPath
-                );
-
-                if (System.IO.File.Exists(fullOldPath))
-                {
-                    System.IO.File.Delete(fullOldPath);
-                }
+                await DeleteFromCloudinary(subject.ImagePath);
             }
 
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(ImageFile.FileName)}";
-            var savePath = Path.Combine(_subjectsFolder, fileName);
-
-            using (var fs = new FileStream(savePath, FileMode.Create))
+            var uploadResult = await UploadToCloudinary(ImageFile);
+            if (uploadResult != null)
             {
-                await ImageFile.CopyToAsync(fs);
+                subject.ImagePath = uploadResult;
             }
-
-            subject.ImagePath = $"/subjects/{fileName}";
         }
 
         _db.Subjects.Update(subject);
@@ -146,16 +132,7 @@ public class AdminSubjectController : Controller
         {
             if (!string.IsNullOrEmpty(subject.ImagePath))
             {
-                var path = subject.ImagePath.TrimStart('/');
-                var fullPath = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    path
-                );
-
-                if (System.IO.File.Exists(fullPath))
-                {
-                    System.IO.File.Delete(fullPath);
-                }
+                await DeleteFromCloudinary(subject.ImagePath);
             }
 
             _db.Subjects.Remove(subject);
@@ -163,5 +140,33 @@ public class AdminSubjectController : Controller
         }
 
         return RedirectToAction(nameof(ManageSubjects));
+    }
+
+    // Helper: Upload image to Cloudinary
+    private async Task<string> UploadToCloudinary(IFormFile file)
+    {
+        using var stream = file.OpenReadStream();
+        var uploadParams = new ImageUploadParams
+        {
+            File = new FileDescription(file.FileName, stream),
+            Folder = "subjects" // optional folder in Cloudinary
+        };
+        var result = await _cloudinary.UploadAsync(uploadParams);
+        return result.SecureUrl.ToString();
+    }
+
+    // Helper: Delete image from Cloudinary
+    private async Task DeleteFromCloudinary(string imageUrl)
+    {
+        try
+        {
+            var uri = new Uri(imageUrl);
+            var publicId = Path.GetFileNameWithoutExtension(uri.AbsolutePath);
+            await _cloudinary.DestroyAsync(new DeletionParams(publicId) { ResourceType = ResourceType.Image });
+        }
+        catch
+        {
+            // ignore errors if deletion fails
+        }
     }
 }

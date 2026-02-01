@@ -24,6 +24,9 @@ namespace AdamsScienceHub.Controllers
             _db = db;
         }
 
+
+        
+
         // GET: Register
         [HttpGet]
         public IActionResult Register() => View();
