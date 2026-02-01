@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AdamsScienceHub")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f0ee0084de4a8bc0842868f8c5a6a39bd20785ca")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+507ad0a5d494216ddb43c3b34b03e7c5550a4a88")]
 [assembly: System.Reflection.AssemblyProductAttribute("AdamsScienceHub")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AdamsScienceHub")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

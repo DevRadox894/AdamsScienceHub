@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,20 +14,13 @@ public class AdminSubjectController : Controller
     private readonly ApplicationDbContext _db;
     private readonly Cloudinary _cloudinary;
 
-    public AdminSubjectController(ApplicationDbContext db, IConfiguration config)
+
+    public AdminSubjectController(ApplicationDbContext db, Cloudinary cloudinary)
     {
         _db = db;
-
-        // Configure Cloudinary
-        var account = new Account(
-            config["Cloudinary:CloudName"],
-            config["Cloudinary:ApiKey"],
-            config["Cloudinary:ApiSecret"]
-        );
-
-        _cloudinary = new Cloudinary(account);
-        _cloudinary.Api.Secure = true;
+        _cloudinary = cloudinary;
     }
+
 
     // GET: /AdminSubject/ManageSubjects
     public async Task<IActionResult> ManageSubjects()

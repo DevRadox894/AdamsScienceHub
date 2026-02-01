@@ -52,13 +52,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 // 🔥 Cloudinary integration
-var cloudinarySettings = builder.Configuration.GetSection("Cloudinary");
-Account account = new Account(
-    cloudinarySettings["CloudName"],
-    cloudinarySettings["ApiKey"],
-    cloudinarySettings["ApiSecret"]
+var cloudinarySection = builder.Configuration.GetSection("Cloudinary");
+
+var account = new Account(
+    cloudinarySection["CloudName"],
+    cloudinarySection["ApiKey"],
+    cloudinarySection["ApiSecret"]
 );
-Cloudinary cloudinary = new Cloudinary(account);
+
+var cloudinary = new Cloudinary(account);
+cloudinary.Api.Secure = true;
+
 builder.Services.AddSingleton(cloudinary);
 
 var app = builder.Build();
