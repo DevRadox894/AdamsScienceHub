@@ -21,9 +21,9 @@ public class AdminSubjectController : Controller
 
         // Configure Cloudinary
         var account = new Account(
-            config["CloudinarySettings:CloudName"],
-            config["CloudinarySettings:ApiKey"],
-            config["CloudinarySettings:ApiSecret"]
+            config["Cloudinary:CloudName"],
+            config["Cloudinary:ApiKey"],
+            config["Cloudinary:ApiSecret"]
         );
 
         _cloudinary = new Cloudinary(account);
