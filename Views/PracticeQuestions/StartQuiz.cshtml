@@ -31,30 +31,41 @@
                 <h5 class="card-title">@(i + 1). @Html.Raw(Model[i].QuestionText.Replace("[       ]", "________"))</h5>
 
                 <!-- Hidden QuestionId -->
-                <input type="hidden" name="QuestionId" value="@Model[i].QuestionId" />
+              <input type="hidden" name="QuestionIds" value="@Model[i].QuestionId" />
 
-                <div class="mt-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_A" value="A" onchange="updateProgress()">
-                        <label class="form-check-label" for="q@(i)_A">A. @Model[i].OptionA</label>
-                    </div>
+<div class="form-check">
+    <input class="form-check-input" type="radio" 
+           name="UserAnswers[@i]" 
+           value="A" 
+           onchange="updateProgress()">
+    <label class="form-check-label">A. @Model[i].OptionA</label>
+</div>
 
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_B" value="B" onchange="updateProgress()">
-                        <label class="form-check-label" for="q@(i)_B">B. @Model[i].OptionB</label>
-                    </div>
+<div class="form-check">
+    <input class="form-check-input" type="radio" 
+           name="UserAnswers[@i]" 
+           value="B" 
+           onchange="updateProgress()">
+    <label class="form-check-label">B. @Model[i].OptionB</label>
+</div>
 
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_C" value="C" onchange="updateProgress()">
-                        <label class="form-check-label" for="q@(i)_C">C. @Model[i].OptionC</label>
-                    </div>
+<div class="form-check">
+    <input class="form-check-input" type="radio" 
+           name="UserAnswers[@i]" 
+           value="C" 
+           onchange="updateProgress()">
+    <label class="form-check-label">C. @Model[i].OptionC</label>
+</div>
 
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_D" value="D" onchange="updateProgress()">
-                        <label class="form-check-label" for="q@(i)_D">D. @Model[i].OptionD</label>
-                    </div>
+<div class="form-check">
+    <input class="form-check-input" type="radio" 
+           name="UserAnswers[@i]" 
+           value="D" 
+           onchange="updateProgress()">
+    <label class="form-check-label">D. @Model[i].OptionD</label>
+</div>
                 </div>
-            </div>
+           
         }
 
         <!-- Pagination -->
