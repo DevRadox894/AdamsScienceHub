@@ -41,8 +41,22 @@
                     <h5>Watch Lesson Video</h5>
                     <p class="small text-muted">Embedded YouTube lesson</p>
                     <div class="ratio ratio-16x9">
-                        <iframe src="@Model.VideoUrl.Replace("watch?v=", "embed/")"
-                                title="Lesson Video" allowfullscreen></iframe>
+                        @{
+                            string videoUrl = Model.VideoUrl;
+
+                            if (videoUrl.Contains("watch?v="))
+                            {
+                                // Convert full YouTube URL to embed
+                                videoUrl = videoUrl.Replace("watch?v=", "embed/");
+                            }
+                            else if (videoUrl.Contains("youtu.be/"))
+                            {
+                                // Convert short YouTube URL to embed
+                                var id = videoUrl.Split("/").Last().Split("?").First();
+                                videoUrl = $"https://www.youtube.com/embed/{id}";
+                            }
+                        }
+                        <iframe src="@videoUrl" title="Lesson Video" allowfullscreen></iframe>
                     </div>
                 </div>
             }
