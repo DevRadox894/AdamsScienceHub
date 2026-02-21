@@ -22,6 +22,7 @@
     <form method="post" asp-action="SubmitQuiz" id="quizForm">
         <input type="hidden" name="SubjectId" value="@subject?.SubjectId" />
         <input type="hidden" id="currentPage" value="1" />
+        <input type="hidden" name="timeUsedSeconds" id="timeUsedSeconds" value="0" />
 
         @for (int i = 0; i < totalQuestions; i++)
         {
@@ -35,19 +36,19 @@
 
                 <div class="mt-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_A" value="A" onchange="updateProgress()">
+                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_A" value="A" onchange="updateProgress()">
                         <label class="form-check-label" for="q@(i)_A">A. @Model[i].OptionA</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_B" value="B" onchange="updateProgress()">
+                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_B" value="B" onchange="updateProgress()">
                         <label class="form-check-label" for="q@(i)_B">B. @Model[i].OptionB</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_C" value="C" onchange="updateProgress()">
+                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_C" value="C" onchange="updateProgress()">
                         <label class="form-check-label" for="q@(i)_C">C. @Model[i].OptionC</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_D" value="D" onchange="updateProgress()">
+                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_D" value="D" onchange="updateProgress()">
                         <label class="form-check-label" for="q@(i)_D">D. @Model[i].OptionD</label>
                     </div>
                 </div>
@@ -60,8 +61,6 @@
             <span class="mx-3" id="pageInfo"></span>
             <button type="button" class="btn btn-outline-primary" id="nextBtn" onclick="changePage(1)">Next</button>
         </div>
-     
-        <input type="hidden" name="timeUsedSeconds" id="timeUsedSeconds" value="0" />
 
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-success btn-lg" onclick="return confirmSubmit()">Submit Quiz</button>
@@ -132,7 +131,7 @@
                 let seconds = totalSeconds % 60;
                 timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-               document.getElementById('timeUsedSeconds').value = @timeLimit * 60 - totalSeconds;
+                document.getElementById('timeUsedSeconds').value = @timeLimit * 60 - totalSeconds;
 
                 if (totalSeconds <= 0) {
                     clearInterval(timer);
