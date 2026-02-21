@@ -35,19 +35,22 @@
 
                 <div class="mt-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_A" value="A" onchange="updateProgress()">
+                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_A" value="A" onchange="updateProgress()">
                         <label class="form-check-label" for="q@(i)_A">A. @Model[i].OptionA</label>
                     </div>
+
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_B" value="B" onchange="updateProgress()">
+                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_B" value="B" onchange="updateProgress()">
                         <label class="form-check-label" for="q@(i)_B">B. @Model[i].OptionB</label>
                     </div>
+
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_C" value="C" onchange="updateProgress()">
+                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_C" value="C" onchange="updateProgress()">
                         <label class="form-check-label" for="q@(i)_C">C. @Model[i].OptionC</label>
                     </div>
+
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="UserAnswer[@i]" id="q@(i)_D" value="D" onchange="updateProgress()">
+                        <input class="form-check-input" type="radio" name="UserAnswer" id="q@(i)_D" value="D" onchange="updateProgress()">
                         <label class="form-check-label" for="q@(i)_D">D. @Model[i].OptionD</label>
                     </div>
                 </div>
@@ -133,7 +136,7 @@
                 timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
                document.getElementById('timeUsedSeconds').value = @timeLimit * 60 - totalSeconds;
-
+            
                 if (totalSeconds <= 0) {
                     clearInterval(timer);
                     timeDisplay.textContent = "Time's Up!";
