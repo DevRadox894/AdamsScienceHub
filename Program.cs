@@ -20,7 +20,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// PostgreSQL — Main App DB
+// Database (SQLite for Development, PostgreSQL for Production)
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -40,7 +40,7 @@ else
 
 // Persist Data Protection keys in PostgreSQL
 builder.Services.AddDataProtection()
-    .SetApplicationName("AdamsScienceHub") // 🔥 IMPORTANT
+    .SetApplicationName("AdamsScienceHub")
     .PersistKeysToDbContext<DataProtectionKeyContext>();
 
 // Cookie Authentication
@@ -53,18 +53,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
     });
 
-// 🔥 Cloudinary integration
+// Cloudinary
 var cloudinarySection = builder.Configuration.GetSection("Cloudinary");
-
 var account = new Account(
     cloudinarySection["CloudName"],
     cloudinarySection["ApiKey"],
     cloudinarySection["ApiSecret"]
 );
-
-var cloudinary = new Cloudinary(account);
-cloudinary.Api.Secure = true;
-
+var cloudinary = new Cloudinary(account) { Api = { Secure = true } };
 builder.Services.AddSingleton(cloudinary);
 
 var app = builder.Build();
@@ -79,7 +75,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -89,24 +84,30 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// 🔥 Render PORT binding
+// Bind Render PORT safely
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 app.Urls.Clear();
 app.Urls.Add($"http://0.0.0.0:{port}");
 
-// Run migrations
+// Run migrations only in Development
 if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
-
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
 
     db.Database.Migrate();
-    keyDb.Database.Migrate(); 
+    keyDb.Database.Migrate();
 
     DbSeeder.SeedAdmin(db);
 }
+else
+{
+    // ✅ In Production, do NOT auto-run migrations to avoid file watching / descriptor limits
+    // You can apply migrations manually or via CI/CD pipeline
+    Console.WriteLine("Running in Production - automatic migrations disabled.");
+}
 
+// Disable inotify watchers in production
 
 app.Run();
