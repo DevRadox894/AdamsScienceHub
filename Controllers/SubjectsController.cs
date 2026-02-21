@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AdamsScienceHub.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdamsScienceHub.Controllers
@@ -18,12 +17,10 @@ namespace AdamsScienceHub.Controllers
             var subject = await _db.Subjects.FindAsync(id);
             if (subject == null) return NotFound();
 
-            // topics = materials for this subject
             var topics = await _db.Materials
-             .Where(m => m.SubjectId == id)
-              .OrderBy(m => m.UploadedAt) // oldest first
-             .ToListAsync();
-
+                .Where(m => m.SubjectId == id)
+                .OrderBy(m => m.UploadedAt)
+                .ToListAsync();
 
             ViewBag.Subject = subject;
             return View(topics);
@@ -38,7 +35,6 @@ namespace AdamsScienceHub.Controllers
 
             if (material == null) return NotFound();
 
-            // get all materials for subject to enable prev/next
             var siblings = await _db.Materials
                 .Where(m => m.SubjectId == material.SubjectId)
                 .OrderBy(m => m.MaterialId)
@@ -49,28 +45,16 @@ namespace AdamsScienceHub.Controllers
 
             ViewBag.Siblings = siblings;
             ViewBag.Index = index;
+
             return View(material);
         }
 
-        // GET: /Subjects/Pdf/{materialId}
-        public async Task<IActionResult> Pdf(int id)
-        {
-            var material = await _db.Materials.FindAsync(id);
-            if (material == null || string.IsNullOrEmpty(material.FilePath))
-                return NotFound();
+        // ✅ Removed Pdf action — not needed for public Cloudinary PDFs
 
-            using var http = new HttpClient();
-            var pdfBytes = await http.GetByteArrayAsync(material.FilePath);
-
-            return File(pdfBytes, "application/pdf");
-        }
-
-
-        // POST: /Subjects/RecordTime  (AJAX)
+        // POST: /Subjects/RecordTime
         [HttpPost]
         public async Task<IActionResult> RecordTime(int subjectId, int seconds)
         {
-            // If you use int userId from session:
             var userEmail = HttpContext.Session.GetString("UserEmail");
             if (string.IsNullOrEmpty(userEmail)) return Unauthorized();
 
