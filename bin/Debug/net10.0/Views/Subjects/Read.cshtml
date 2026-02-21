@@ -19,32 +19,13 @@
             <strong>@Model.TopicTitle</strong>
             <div class="small text-muted">Material @(index + 1) of @((siblings?.Count ?? 1))</div>
         </div>
-        <div>
-            @if (siblings != null && siblings.Count > 0)
-            {
-                if (index > 0)
-                {
-                    <a class="btn btn-edit"
-                       asp-controller="Subjects"
-                       asp-action="Read"
-                       asp-route-id="@siblings[index - 1].MaterialId">Prev</a>
-                }
-
-                if (index < siblings.Count - 1)
-                {
-                    <a class="btn btn-edit"
-                       asp-controller="Subjects"
-                       asp-action="Read"
-                       asp-route-id="@siblings[index + 1].MaterialId">Next</a>
-                }
-            }
-        </div>
     </div>
 
     <div class="row">
         <!-- PDF Viewer -->
         <div class="col-12 col-lg-9 mb-3">
-            <div class="pdf-controls mb-2 d-flex align-items-center gap-2">
+
+            <div class="pdf-controls mb-2 d-flex align-items-center gap-2" style="font-size: 12px;">
                 <button id="prev-page" class="btn btn-edit">Prev Page</button>
                 <span>Page <span id="page-num"></span> of <span id="page-count"></span></span>
                 <button id="next-page" class="btn btn-edit">Next Page</button>
@@ -61,8 +42,22 @@
                     <h5>Watch Lesson Video</h5>
                     <p class="small text-muted">Embedded YouTube lesson</p>
                     <div class="ratio ratio-16x9">
-                        <iframe src="@Model.VideoUrl.Replace("watch?v=", "embed/")"
-                                title="Lesson Video" allowfullscreen></iframe>
+                        @{
+                            string videoUrl = Model.VideoUrl;
+
+                            if (videoUrl.Contains("watch?v="))
+                            {
+                                // Convert full YouTube URL to embed
+                                videoUrl = videoUrl.Replace("watch?v=", "embed/");
+                            }
+                            else if (videoUrl.Contains("youtu.be/"))
+                            {
+                                // Convert short YouTube URL to embed
+                                var id = videoUrl.Split("/").Last().Split("?").First();
+                                videoUrl = $"https://www.youtube.com/embed/{id}";
+                            }
+                        }
+                        <iframe src="@videoUrl" title="Lesson Video" allowfullscreen></iframe>
                     </div>
                 </div>
             }
@@ -75,7 +70,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.worker.min.js"></script>
 
     <script>
+        // 🔥 Use Cloudinary URL directly
         const url = '@Model.FilePath';
+
         let pdfDoc = null, pageNum = 1, pageCount = 0;
         const canvas = document.getElementById('pdf-render');
         const ctx = canvas.getContext('2d');
@@ -87,11 +84,13 @@
             pageCount = doc.numPages;
             document.getElementById('page-count').textContent = pageCount;
             renderPage(pageNum);
+        }).catch(err => {
+            console.error('Error loading PDF:', err);
+            alert('Failed to load PDF. Make sure the URL is public.');
         });
 
         function renderPage(num) {
             pdfDoc.getPage(num).then(page => {
-                // Scale PDF to fit canvas width
                 const scale = canvas.parentElement.clientWidth / page.getViewport({ scale: 1 }).width * 0.95;
                 const viewport = page.getViewport({ scale: scale });
 
@@ -116,7 +115,6 @@
             renderPage(pageNum);
         });
 
-        // Make PDF responsive on window resize
         window.addEventListener('resize', () => renderPage(pageNum));
     </script>
 }

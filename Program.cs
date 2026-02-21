@@ -1,5 +1,7 @@
 ﻿using AdamsScienceHub.Data;
+using AdamsScienceHub.Models;
 using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
@@ -101,7 +103,7 @@ if (app.Environment.IsDevelopment())
     var keyDb = scope.ServiceProvider.GetRequiredService<DataProtectionKeyContext>();
 
     db.Database.Migrate();
-    keyDb.Database.Migrate();
+    keyDb.Database.Migrate(); 
 
     DbSeeder.SeedAdmin(db);
 }

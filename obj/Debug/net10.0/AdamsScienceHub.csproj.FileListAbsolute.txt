@@ -460,7 +460,6 @@ C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\st
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\staticwebassets.development.json
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\swae.build.ex.cache
-C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\AdamsSci.DC35850E.Up2Date
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\AdamsScienceHub.dll
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\refint\AdamsScienceHub.dll

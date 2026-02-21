@@ -47,6 +47,7 @@
                             <a class="btn" href="@m.FilePath" target="_blank" style="flex: 1; font-size: 12px; padding: 6px 10px; background-color: #00f0ff; color: #071021; border: none; border-radius: 6px; text-decoration: none; text-align: center;">
                                 Open PDF
                             </a>
+                      
                         </div>
                     </div>
                 </div>
