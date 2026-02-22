@@ -109,9 +109,8 @@ namespace AdamsScienceHub.Controllers
             {
                 var user = _db.Users.FirstOrDefault(u => u.Id == userId);
 
-                if (user != null)
+                if (user != null && QuestionIds.Any())
                 {
-                    // Save quiz result
                     var firstQuestion = _db.Questions
                         .Include(q => q.Subject)
                         .FirstOrDefault(q => q.QuestionId == QuestionIds.First());
@@ -120,7 +119,7 @@ namespace AdamsScienceHub.Controllers
 
                     var result = new QuizResult
                     {
-                        UserId = user.Id, // int
+                        UserId = user.Id,
                         SubjectName = subjectName,
                         Score = percentage,
                         TotalQuestions = total,
@@ -130,16 +129,22 @@ namespace AdamsScienceHub.Controllers
                         DateTaken = DateTime.Now
                     };
 
-                    _db.QuizResults.Add(result);
-                    _db.SaveChanges();
+                    try
+                    {
+                        _db.QuizResults.Add(result);
+                        _db.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content($"DB Error: {ex.Message}");
+                    }
                 }
             }
-
             // Save session for review
             HttpContext.Session.SetString("QuestionIds", JsonSerializer.Serialize(QuestionIds));
             HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswers));
 
-            // Redirect to dashboard or progress page where UserProgressViewModel is used
+            
             return View("Result");
         }
 
