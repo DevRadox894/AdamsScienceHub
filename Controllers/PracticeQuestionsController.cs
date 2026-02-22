@@ -69,8 +69,8 @@ namespace AdamsScienceHub.Controllers
         }
 
 
-       // SUBMIT
-        [HttpPost]
+        // SUBMIT
+      [HttpPost]
         public IActionResult SubmitQuiz(List<int> QuestionIds, List<string>? UserAnswers, int timeUsedSeconds)
         {
             if (QuestionIds == null || !QuestionIds.Any())
@@ -107,46 +107,13 @@ namespace AdamsScienceHub.Controllers
                 percentage >= 50 ? "Good effort! Keep improving!" :
                 "Keep practicing! You’ll improve!";
 
-            // --- Save quiz result to database ---
-           
-            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier); // string from claim
-
-            if (int.TryParse(userIdString, out int userId))
-            {
-                var user = _db.Users.FirstOrDefault(u => u.Id == userId);
-
-                if (user != null && QuestionIds.Any())
-                {
-                    var firstQuestion = _db.Questions
-                        .Include(q => q.Subject)
-                        .FirstOrDefault(q => q.QuestionId == QuestionIds.First());
-
-                    string subjectName = firstQuestion?.Subject?.SubjectName ?? "Unknown";
-
-                    var result = new QuizResult
-                    {
-                        UserId = user.Id, // int
-                        SubjectName = subjectName,
-                        Score = percentage,
-                        TotalQuestions = total,
-                        CorrectAnswers = score,
-                        WrongAnswers = total - score,
-                        TimeSpent = TimeSpan.FromSeconds(timeUsedSeconds).ToString(@"hh\:mm\:ss"),
-                        DateTaken = DateTime.Now
-                    };
-
-                    _db.QuizResults.Add(result);
-                    _db.SaveChanges();
-                }
-            }
-            // Keep session data for review
             HttpContext.Session.SetString("QuestionIds", JsonSerializer.Serialize(QuestionIds));
             HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswers));
 
             return View("Result");
         }
         
-        
+
         // REVIEW QUIZ
         public IActionResult Review()
         {
