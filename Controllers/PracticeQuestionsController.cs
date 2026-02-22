@@ -70,14 +70,15 @@ namespace AdamsScienceHub.Controllers
 
 
         //SUBMIT
-
         [HttpPost]
-        public IActionResult SubmitQuiz(List<int> QuestionIds, List<string> UserAnswers, int timeUsedSeconds)
+        public IActionResult SubmitQuiz(List<int> QuestionIds, List<string>? UserAnswers, int timeUsedSeconds)
         {
-            if (QuestionIds == null || UserAnswers == null)
+            if (QuestionIds == null || !QuestionIds.Any())
             {
                 return RedirectToAction("Subjects");
             }
+
+            UserAnswers ??= new List<string>();
 
             int score = 0;
             int total = QuestionIds.Count;
@@ -93,48 +94,18 @@ namespace AdamsScienceHub.Controllers
                 }
             }
 
-            double percentage = (total == 0) ? 0 : (score * 100.0 / total);
+            double percentage = total == 0 ? 0 : (score * 100.0 / total);
 
             ViewBag.Score = score;
             ViewBag.Total = total;
             ViewBag.CorrectCount = score;
             ViewBag.WrongCount = total - score;
 
-            if (percentage == 100)
-                ViewBag.PerformanceMessage = "Perfect Score! Absolute mastery!";
-            else if (percentage >= 75)
-                ViewBag.PerformanceMessage = "Great job! Strong performance!";
-            else if (percentage >= 50)
-                ViewBag.PerformanceMessage = "Good effort! Keep improving!";
-            else
-                ViewBag.PerformanceMessage = "Keep practicing! You’ll improve!";
-
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-            var user = _db.Users.FirstOrDefault(u => u.Email == userEmail);
-
-            if (user != null && QuestionIds.Any())
-            {
-                var firstQuestion = _db.Questions
-                    .Include(q => q.Subject)
-                    .FirstOrDefault(q => q.QuestionId == QuestionIds.First());
-
-                string subjectName = firstQuestion?.Subject?.SubjectName ?? "Unknown";
-
-                var result = new QuizResult
-                {
-                    UserId = user.Id,
-                    SubjectName = subjectName,
-                    Score = percentage,
-                    TotalQuestions = total,
-                    CorrectAnswers = score,
-                    WrongAnswers = total - score,
-                    TimeSpent = TimeSpan.FromSeconds(timeUsedSeconds).ToString(@"hh\:mm\:ss"),
-                    DateTaken = DateTime.Now
-                };
-
-                _db.QuizResults.Add(result);
-                _db.SaveChanges();
-            }
+            ViewBag.PerformanceMessage =
+                percentage == 100 ? "Perfect Score! Absolute mastery!" :
+                percentage >= 75 ? "Great job! Strong performance!" :
+                percentage >= 50 ? "Good effort! Keep improving!" :
+                "Keep practicing! You’ll improve!";
 
             HttpContext.Session.SetString("QuestionIds", JsonSerializer.Serialize(QuestionIds));
             HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswers));
