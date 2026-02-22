@@ -69,6 +69,7 @@ namespace AdamsScienceHub.Controllers
         }
 
 
+       // SUBMIT
         [HttpPost]
         public IActionResult SubmitQuiz(List<int> QuestionIds, List<string>? UserAnswers, int timeUsedSeconds)
         {
@@ -107,8 +108,10 @@ namespace AdamsScienceHub.Controllers
                 "Keep practicing! You’ll improve!";
 
             // --- Save quiz result to database ---
-            // --- Save quiz result to database ---
-            if (int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
+           
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier); // string from claim
+
+            if (int.TryParse(userIdString, out int userId))
             {
                 var user = _db.Users.FirstOrDefault(u => u.Id == userId);
 
@@ -122,7 +125,7 @@ namespace AdamsScienceHub.Controllers
 
                     var result = new QuizResult
                     {
-                        UserId = user.Id,
+                        UserId = user.Id, // int
                         SubjectName = subjectName,
                         Score = percentage,
                         TotalQuestions = total,
@@ -136,14 +139,14 @@ namespace AdamsScienceHub.Controllers
                     _db.SaveChanges();
                 }
             }
-            // --------------------------------------
-
             // Keep session data for review
             HttpContext.Session.SetString("QuestionIds", JsonSerializer.Serialize(QuestionIds));
             HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswers));
 
             return View("Result");
         }
+        
+        
         // REVIEW QUIZ
         public IActionResult Review()
         {
