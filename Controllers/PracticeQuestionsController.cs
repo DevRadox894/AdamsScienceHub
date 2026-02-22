@@ -70,28 +70,24 @@ namespace AdamsScienceHub.Controllers
 
 
         // SUBMIT
-      [HttpPost]
+        [HttpPost]
         public IActionResult SubmitQuiz(List<int> QuestionIds, List<string>? UserAnswers, int timeUsedSeconds)
         {
             if (QuestionIds == null || !QuestionIds.Any())
-            {
                 return RedirectToAction("Subjects");
-            }
 
             UserAnswers ??= new List<string>();
 
             int score = 0;
             int total = QuestionIds.Count;
 
+            // Calculate score
             for (int i = 0; i < total; i++)
             {
                 string? answer = (i < UserAnswers.Count) ? UserAnswers[i] : null;
                 var question = _db.Questions.Find(QuestionIds[i]);
-
                 if (question != null && answer == question.CorrectAnswer)
-                {
                     score++;
-                }
             }
 
             double percentage = total == 0 ? 0 : (score * 100.0 / total);
@@ -100,19 +96,53 @@ namespace AdamsScienceHub.Controllers
             ViewBag.Total = total;
             ViewBag.CorrectCount = score;
             ViewBag.WrongCount = total - score;
-
             ViewBag.PerformanceMessage =
                 percentage == 100 ? "Perfect Score! Absolute mastery!" :
                 percentage >= 75 ? "Great job! Strong performance!" :
                 percentage >= 50 ? "Good effort! Keep improving!" :
                 "Keep practicing! You’ll improve!";
 
+            // --- Save quiz result to database ---
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out int userId))
+            {
+                var user = _db.Users.FirstOrDefault(u => u.Id == userId);
+
+                if (user != null)
+                {
+                    // Save quiz result
+                    var firstQuestion = _db.Questions
+                        .Include(q => q.Subject)
+                        .FirstOrDefault(q => q.QuestionId == QuestionIds.First());
+
+                    string subjectName = firstQuestion?.Subject?.SubjectName ?? "Unknown";
+
+                    var result = new QuizResult
+                    {
+                        UserId = user.Id, // int
+                        SubjectName = subjectName,
+                        Score = percentage,
+                        TotalQuestions = total,
+                        CorrectAnswers = score,
+                        WrongAnswers = total - score,
+                        TimeSpent = TimeSpan.FromSeconds(timeUsedSeconds).ToString(@"hh\:mm\:ss"),
+                        DateTaken = DateTime.Now
+                    };
+
+                    _db.QuizResults.Add(result);
+                    _db.SaveChanges();
+                }
+            }
+
+            // Save session for review
             HttpContext.Session.SetString("QuestionIds", JsonSerializer.Serialize(QuestionIds));
             HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswers));
 
-            return View("Result");
+            // Redirect to dashboard or progress page where UserProgressViewModel is used
+            return RedirectToAction("UserProgress", "Home");
         }
-        
+
 
         // REVIEW QUIZ
         public IActionResult Review()
