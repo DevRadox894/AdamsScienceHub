@@ -72,15 +72,21 @@ namespace AdamsScienceHub.Controllers
         //SUBMIT
 
         [HttpPost]
-        public IActionResult SubmitQuiz(List<int> QuestionId, List<string> UserAnswer, int timeUsedSeconds)
+        public IActionResult SubmitQuiz(List<int> QuestionIds, List<string> UserAnswers, int timeUsedSeconds)
         {
+            if (QuestionIds == null || UserAnswers == null)
+            {
+                return RedirectToAction("Subjects");
+            }
+
             int score = 0;
-            int total = QuestionId.Count;
+            int total = QuestionIds.Count;
 
             for (int i = 0; i < total; i++)
             {
-                string? answer = (i < UserAnswer.Count) ? UserAnswer[i] : null;
-                var question = _db.Questions.Find(QuestionId[i]);
+                string? answer = (i < UserAnswers.Count) ? UserAnswers[i] : null;
+                var question = _db.Questions.Find(QuestionIds[i]);
+
                 if (question != null && answer == question.CorrectAnswer)
                 {
                     score++;
@@ -94,36 +100,26 @@ namespace AdamsScienceHub.Controllers
             ViewBag.CorrectCount = score;
             ViewBag.WrongCount = total - score;
 
-            // Performance Message
             if (percentage == 100)
-                ViewBag.PerformanceMessage = "Perfect Score! Absolute mastery! You should be incredibly proud!";
-            else if (percentage >= 90)
-                ViewBag.PerformanceMessage = "Outstanding! That's a top-tier performance.";
+                ViewBag.PerformanceMessage = "Perfect Score! Absolute mastery!";
             else if (percentage >= 75)
-                ViewBag.PerformanceMessage = "Solid Performance! You've got a strong foundation. Keep it up!";
+                ViewBag.PerformanceMessage = "Great job! Strong performance!";
             else if (percentage >= 50)
-                ViewBag.PerformanceMessage = "Good effort! You're on the right track. Reviewing a few topics will make you even stronger.";
-            else if (percentage >= 30)
-                ViewBag.PerformanceMessage = "Brave Attempt! Thank you for your effort. Keep trying.";
+                ViewBag.PerformanceMessage = "Good effort! Keep improving!";
             else
-                ViewBag.PerformanceMessage = "Don't get discouraged! Every attempt is a step towards learning. Let's review and try again!";
+                ViewBag.PerformanceMessage = "Keep practicing! You’ll improve!";
 
-            // ⛔ THIS was your mistake — you were NOT saving any results.
-
-            // Get logged-in user email (claims)
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             var user = _db.Users.FirstOrDefault(u => u.Email == userEmail);
 
-            if (user != null)
+            if (user != null && QuestionIds.Any())
             {
-                // Get subject from the first question
                 var firstQuestion = _db.Questions
-               .Include(q => q.Subject)
-               .FirstOrDefault(q => q.QuestionId == QuestionId.First());
+                    .Include(q => q.Subject)
+                    .FirstOrDefault(q => q.QuestionId == QuestionIds.First());
 
                 string subjectName = firstQuestion?.Subject?.SubjectName ?? "Unknown";
 
-                // Save quiz result to database
                 var result = new QuizResult
                 {
                     UserId = user.Id,
@@ -140,14 +136,11 @@ namespace AdamsScienceHub.Controllers
                 _db.SaveChanges();
             }
 
-            HttpContext.Session.SetString("QuestionIds", JsonSerializer.Serialize(QuestionId));
-            HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswer));
-
+            HttpContext.Session.SetString("QuestionIds", JsonSerializer.Serialize(QuestionIds));
+            HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswers));
 
             return View("Result");
         }
-
-       
 
         // REVIEW QUIZ
         public IActionResult Review()
