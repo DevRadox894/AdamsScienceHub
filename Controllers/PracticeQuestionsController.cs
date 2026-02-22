@@ -140,7 +140,7 @@ namespace AdamsScienceHub.Controllers
             HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswers));
 
             // Redirect to dashboard or progress page where UserProgressViewModel is used
-            return RedirectToAction("UserProgress", "Home");
+            return View("Result");
         }
 
 
