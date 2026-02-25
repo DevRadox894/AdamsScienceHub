@@ -89,28 +89,40 @@
             alert('Failed to load PDF. Make sure the URL is public.');
         });
 
-            function renderPage(num) {
+                   function renderPage(num) {
             pdfDoc.getPage(num).then(page => {
 
                 const containerWidth = canvas.parentElement.clientWidth;
+                const baseViewport = page.getViewport({ scale: 1 });
 
-                // Get default viewport
-                const viewport = page.getViewport({ scale: 1 });
+                // Fit width
+                let scale = containerWidth / baseViewport.width;
 
-                // Calculate scale to fit width properly
-                const scale = containerWidth / viewport.width;
+                // 🔥 Boost zoom for mobile
+                if (window.innerWidth < 768) {
+                    scale *= 1.4;   // increase if you want bigger (1.5 or 1.6)
+                }
 
-                const scaledViewport = page.getViewport({ scale: scale });
+                const viewport = page.getViewport({ scale: scale });
 
-                canvas.width = scaledViewport.width;
-                canvas.height = scaledViewport.height;
+                // 🔥 Retina sharp rendering
+                const outputScale = window.devicePixelRatio || 1;
+
+                canvas.width = viewport.width * outputScale;
+                canvas.height = viewport.height * outputScale;
+
+                canvas.style.width = viewport.width + "px";
+                canvas.style.height = viewport.height + "px";
+
+                ctx.setTransform(outputScale, 0, 0, outputScale, 0, 0);
 
                 const renderCtx = {
                     canvasContext: ctx,
-                    viewport: scaledViewport
+                    viewport: viewport
                 };
 
                 page.render(renderCtx);
+
                 document.getElementById('page-num').textContent = num;
             });
         }
