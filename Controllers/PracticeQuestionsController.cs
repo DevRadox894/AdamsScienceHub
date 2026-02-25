@@ -139,7 +139,6 @@ namespace AdamsScienceHub.Controllers
                         // Log error somewhere (file, console, or telemetry)
                         Console.WriteLine(dbEx.InnerException?.Message ?? dbEx.Message);
                         TempData["Error"] = "An error occurred while saving your quiz. Please try again.";
-                        return RedirectToAction("Subjects");
                     }
                 }
             }
