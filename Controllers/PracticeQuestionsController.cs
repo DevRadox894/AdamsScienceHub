@@ -104,49 +104,62 @@ namespace AdamsScienceHub.Controllers
 
             // --- Save quiz result to database ---
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out int userId))
+            if (string.IsNullOrEmpty(userIdString))
             {
-                var user = _db.Users.FirstOrDefault(u => u.Id == userId);
+                // Log production issue
+                Console.WriteLine("SubmitQuiz failed: UserIdString is null. User may not be logged in.");
+                TempData["Error"] = "You must be logged in to save your quiz.";
+                return View("Result");
+            }
 
-                if (user != null && QuestionIds.Any())
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                Console.WriteLine($"SubmitQuiz failed: UserIdString is not a valid integer ({userIdString}).");
+                TempData["Error"] = "User ID invalid. Contact support.";
+                return View("Result");
+            }
+
+            var user = _db.Users.FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                Console.WriteLine($"SubmitQuiz failed: No user found with ID {userId}.");
+                TempData["Error"] = "User not found in the database.";
+                return View("Result");
+            }
+
+            if (QuestionIds.Any())
+            {
+                var firstQuestion = _db.Questions
+                    .Include(q => q.Subject)
+                    .FirstOrDefault(q => q.QuestionId == QuestionIds.First());
+
+                string subjectName = firstQuestion?.Subject?.SubjectName ?? "Unknown";
+
+                var result = new QuizResult
                 {
-                    var firstQuestion = _db.Questions
-                        .Include(q => q.Subject)
-                        .FirstOrDefault(q => q.QuestionId == QuestionIds.First());
-                    
-                    string subjectName = firstQuestion?.Subject?.SubjectName ?? "Unknown";
-                    
-                    var result = new QuizResult
-                    {
-                        UserId = user.Id,
-                        SubjectName = subjectName,
-                        Score = percentage,
-                        TotalQuestions = total,
-                        CorrectAnswers = score,
-                        WrongAnswers = total - score,
-                        TimeSpent = TimeSpan.FromSeconds(timeUsedSeconds).ToString(@"hh\:mm\:ss"),
-                        DateTaken = DateTime.Now
-                    };
+                    UserId = user.Id,
+                    SubjectName = subjectName,
+                    Score = percentage,
+                    TotalQuestions = total,
+                    CorrectAnswers = score,
+                    WrongAnswers = total - score,
+                    TimeSpent = TimeSpan.FromSeconds(timeUsedSeconds).ToString(@"hh\:mm\:ss"),
+                    DateTaken = DateTime.UtcNow // Use UTC for production
+                };
 
-                    try
-                    {
-                        _db.QuizResults.Add(result);
-                        _db.SaveChanges();
-                    }
-                    catch (DbUpdateException dbEx)
-                    {
-                        // Log error somewhere (file, console, or telemetry)
-                        Console.WriteLine(dbEx.InnerException?.Message ?? dbEx.Message);
-                        TempData["Error"] = "An error occurred while saving your quiz. Please try again.";
-                    }
+                try
+                {
+                    _db.QuizResults.Add(result);
+                    _db.SaveChanges();
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    Console.WriteLine("Error saving QuizResult: " + (dbEx.InnerException?.Message ?? dbEx.Message));
+                    TempData["Error"] = "An error occurred while saving your quiz. Please try again later.";
                 }
             }
-            // Save session for review
-            HttpContext.Session.SetString("QuestionIds", JsonSerializer.Serialize(QuestionIds));
-            HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswers));
 
-            
+
             return View("Result");
         }
 
