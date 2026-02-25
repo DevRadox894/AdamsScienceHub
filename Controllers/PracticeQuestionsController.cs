@@ -114,9 +114,9 @@ namespace AdamsScienceHub.Controllers
                     var firstQuestion = _db.Questions
                         .Include(q => q.Subject)
                         .FirstOrDefault(q => q.QuestionId == QuestionIds.First());
-
+                    
                     string subjectName = firstQuestion?.Subject?.SubjectName ?? "Unknown";
-
+                    
                     var result = new QuizResult
                     {
                         UserId = user.Id,
@@ -134,9 +134,12 @@ namespace AdamsScienceHub.Controllers
                         _db.QuizResults.Add(result);
                         _db.SaveChanges();
                     }
-                    catch (Exception ex)
+                    catch (DbUpdateException dbEx)
                     {
-                        return Content($"DB Error: {ex.Message}");
+                        // Log error somewhere (file, console, or telemetry)
+                        Console.WriteLine(dbEx.InnerException?.Message ?? dbEx.Message);
+                        TempData["Error"] = "An error occurred while saving your quiz. Please try again.";
+                        return RedirectToAction("Subjects");
                     }
                 }
             }

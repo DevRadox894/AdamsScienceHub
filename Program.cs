@@ -5,6 +5,7 @@ using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ if (builder.Environment.IsDevelopment())
 
     builder.Services.AddDbContext<DataProtectionKeyContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("DataProtectionKeyContext")));
+
 }
 else
 {
@@ -35,11 +37,12 @@ else
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
     builder.Services.AddDbContext<DataProtectionKeyContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DataProtectionKeyContext")));
+     options.UseNpgsql(builder.Configuration.GetConnectionString("DataProtectionKeyContext"))
+            .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
+ );
 }
-
-// Persist Data Protection keys in PostgreSQL
-builder.Services.AddDataProtection()
+    // Persist Data Protection keys in PostgreSQL
+    builder.Services.AddDataProtection()
     .SetApplicationName("AdamsScienceHub")
     .PersistKeysToDbContext<DataProtectionKeyContext>();
 
