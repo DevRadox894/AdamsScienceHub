@@ -31,7 +31,7 @@
                 <button id="next-page" class="btn btn-edit">Next Page</button>
             </div>
 
-            <canvas id="pdf-render" style="border:1px solid #ccc; width:100%; height:75vh;"></canvas>
+               <canvas id="pdf-render" style="border:1px solid #ccc; width:100%;"></canvas>
         </div>
 
         <!-- Video Card -->
@@ -89,15 +89,27 @@
             alert('Failed to load PDF. Make sure the URL is public.');
         });
 
-        function renderPage(num) {
+            function renderPage(num) {
             pdfDoc.getPage(num).then(page => {
-                const scale = canvas.parentElement.clientWidth / page.getViewport({ scale: 1 }).width * 0.95;
-                const viewport = page.getViewport({ scale: scale });
 
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
+                const containerWidth = canvas.parentElement.clientWidth;
 
-                const renderCtx = { canvasContext: ctx, viewport };
+                // Get default viewport
+                const viewport = page.getViewport({ scale: 1 });
+
+                // Calculate scale to fit width properly
+                const scale = containerWidth / viewport.width;
+
+                const scaledViewport = page.getViewport({ scale: scale });
+
+                canvas.width = scaledViewport.width;
+                canvas.height = scaledViewport.height;
+
+                const renderCtx = {
+                    canvasContext: ctx,
+                    viewport: scaledViewport
+                };
+
                 page.render(renderCtx);
                 document.getElementById('page-num').textContent = num;
             });
