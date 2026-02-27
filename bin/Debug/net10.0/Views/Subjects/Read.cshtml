@@ -31,7 +31,7 @@
                 <button id="next-page" class="btn btn-edit">Next Page</button>
             </div>
 
-            <canvas id="pdf-render" style="border:1px solid #ccc; width:100%; height:75vh;"></canvas>
+               <canvas id="pdf-render" style="border:1px solid #ccc; width:100%;"></canvas>
         </div>
 
         <!-- Video Card -->
@@ -89,16 +89,40 @@
             alert('Failed to load PDF. Make sure the URL is public.');
         });
 
-        function renderPage(num) {
+                   function renderPage(num) {
             pdfDoc.getPage(num).then(page => {
-                const scale = canvas.parentElement.clientWidth / page.getViewport({ scale: 1 }).width * 0.95;
+
+                const containerWidth = canvas.parentElement.clientWidth;
+                const baseViewport = page.getViewport({ scale: 1 });
+
+                // Fit width
+                let scale = containerWidth / baseViewport.width;
+
+                // 🔥 Boost zoom for mobile
+                if (window.innerWidth < 768) {
+                    scale *= 1.4;   // increase if you want bigger (1.5 or 1.6)
+                }
+
                 const viewport = page.getViewport({ scale: scale });
 
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
+                // 🔥 Retina sharp rendering
+                const outputScale = window.devicePixelRatio || 1;
 
-                const renderCtx = { canvasContext: ctx, viewport };
+                canvas.width = viewport.width * outputScale;
+                canvas.height = viewport.height * outputScale;
+
+                canvas.style.width = viewport.width + "px";
+                canvas.style.height = viewport.height + "px";
+
+                ctx.setTransform(outputScale, 0, 0, outputScale, 0, 0);
+
+                const renderCtx = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+
                 page.render(renderCtx);
+
                 document.getElementById('page-num').textContent = num;
             });
         }

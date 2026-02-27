@@ -578,6 +578,12 @@ body {
         display: block;
     }
 
+@media (max-width: 768px) {
+    .row.g-3 {
+        --bs-gutter-y: 0.34rem;
+    }
+}
+
 /* ---------- PDF Viewer ---------- */
 #pdf-render {
     border: 1px solid #ccc;

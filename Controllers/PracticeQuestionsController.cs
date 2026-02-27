@@ -159,6 +159,9 @@ namespace AdamsScienceHub.Controllers
                 }
             }
 
+            // Save for Review
+            HttpContext.Session.SetString("QuestionIds", JsonSerializer.Serialize(QuestionIds));
+            HttpContext.Session.SetString("UserAnswers", JsonSerializer.Serialize(UserAnswers));
 
             return View("Result");
         }
