@@ -571,7 +571,7 @@ body {
 
     .dashboard-card h5 {
         margin: 0;
-        font-size: 1.1rem;
+        font-size: 0.92rem;
     }
 
     .dashboard-card a {
@@ -579,8 +579,20 @@ body {
     }
 
 @media (max-width: 768px) {
+
+    /* Remove extra spacing between mobile cards */
+    .col-12 {
+        margin-bottom: 0.3rem !important; /* reduce space between cards */
+    }
+
+    /* Reduce padding inside cards */
+    .dashboard-card {
+        padding: 0.8rem !important;
+    }
+
+    /* Reduce gutter if needed */
     .row.g-3 {
-        --bs-gutter-y: 0.34rem;
+        --bs-gutter-y: 0.2rem !important;
     }
 }
 
