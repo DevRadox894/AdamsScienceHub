@@ -6,6 +6,8 @@
     ViewData["Title"] = "User Dashboard";
     Layout = "_Layout";
 
+
+    ViewData["IsUserDashboard"] = true;
     // Extract first name
     var fullName = Model.FullName?.Trim() ?? "";
     var firstName = fullName.Contains(" ") ? fullName.Split(' ')[0] : fullName;

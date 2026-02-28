@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Adams Science Hub</title>
 
-    <!-- Favicon -->
+  
     <!-- Favicons -->
     <link rel="icon" href="~/FaviconFile/favicon_io/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="~/FaviconFile/favicon_io/favicon-32x32.png" sizes="32x32" type="image/png" />
@@ -21,7 +21,6 @@
 
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
@@ -52,6 +51,77 @@
         </div>
     </footer>
 
+    @if (User?.Identity?.IsAuthenticated == true
+        && User.IsInRole("User")
+        && ViewData["IsUserDashboard"] != null)
+    {
+        <div id="updateCard" class="update-card" role="alert">
+            <div class="update-content">
+                <button type="button" class="close-btn" id="closeUpdateBtn">&times;</button>
+                <h2>🛠️ We are upgrading</h2>
+                <p>
+                    New study features incoming ✨ <br />
+                    Respawn in <span id="countdown">6</span>s
+                </p>
+            </div>
+        </div>
+    }
+    <script>
+        (function () {
+            document.addEventListener("DOMContentLoaded", function () {
+
+                const card = document.getElementById("updateCard");
+                if (!card) return;
+
+                       const hasShown = sessionStorage.getItem("updateCardShown");
+
+        if (hasShown === "true") {
+            return; // Do nothing, stay hidden
+        }
+
+        // Now show it
+        card.style.display = "block";
+        sessionStorage.setItem("updateCardShown", "true");
+
+               
+
+
+                const countdownElement = document.getElementById("countdown");
+                const closeButton = document.getElementById("closeUpdateBtn");
+
+                let timeLeft = 6;
+
+                const timer = setInterval(function () {
+                    timeLeft--;
+
+                    if (countdownElement) {
+                        countdownElement.textContent = timeLeft;
+                    }
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        hideCard();
+                    }
+
+                }, 1000);
+
+                function hideCard() {
+                    card.classList.add("fade-out");
+                    setTimeout(function () {
+                        card.remove();
+                    }, 400);
+                }
+
+                if (closeButton) {
+                    closeButton.addEventListener("click", function () {
+                        clearInterval(timer);
+                        hideCard();
+                    });
+                }
+
+            });
+        })();
+    </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
