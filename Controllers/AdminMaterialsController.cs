@@ -120,8 +120,7 @@ namespace AdamsScienceHub.Controllers
             material.SubjectId = SubjectId;
             material.TopicTitle = TopicTitle.Trim();
             material.VideoUrl = string.IsNullOrWhiteSpace(VideoUrl) ? null : VideoUrl.Trim();
-            material.UploadedAt = DateTime.UtcNow;
-
+           
             if (PdfFile != null && PdfFile.Length > 0)
             {
                 var ext = Path.GetExtension(PdfFile.FileName).ToLowerInvariant();

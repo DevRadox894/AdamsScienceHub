@@ -17,5 +17,6 @@ namespace AdamsScienceHub.Models
         public bool CalculatorEnabled { get; set; } 
 
         public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
+   
     }
 }

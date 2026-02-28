@@ -22,7 +22,11 @@
             <div>⏱ Time Spent: <span id="timeSpent">00:00:00</span></div>
 
             <!-- 🕒 Current Time -->
-            <div>🕒 Current Time: <span id="currentTime">@DateTime.Now.ToString("hh:mm:ss tt")</span></div>
+            @{
+                var nigeriaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Central Africa Standard Time");
+                var nigeriaTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, nigeriaTimeZone);
+            }
+            <div>🕒 Current Time: <span id="currentTime">@nigeriaTime.ToString("hh:mm:ss tt")</span></div>
         </div>
     </div>
 

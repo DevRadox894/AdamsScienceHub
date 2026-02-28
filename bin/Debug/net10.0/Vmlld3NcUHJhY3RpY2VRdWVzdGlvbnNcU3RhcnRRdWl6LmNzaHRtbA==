@@ -56,11 +56,12 @@
            
  
         <!-- Pagination -->
-        <div class="pagination text-center mt-4">
+        <div class="pagination text-center mt-4" style="font-size: 12px;">
             <button type="button" class="btn btn-outline-primary" id="prevBtn" onclick="changePage(-1)">Previous</button>
             <span class="mx-3" id="pageInfo"></span>
             <button type="button" class="btn btn-outline-primary" id="nextBtn" onclick="changePage(1)">Next</button>
         </div>
+
 
         <input type="hidden" name="timeUsedSeconds" id="timeUsedSeconds" value="0" />
 

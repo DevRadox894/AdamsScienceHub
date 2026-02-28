@@ -1,0 +1,38 @@
+﻿@model AdamsScienceHub.Models.Subject
+
+<div class="admin-container">
+    <div class="admin-greeting mb-4">
+        <h2>Materials for @Model.SubjectName</h2>
+        <a asp-action="ManageMaterials" class="btn btn-secondary mb-3">← Back to Subjects</a>
+        <p>Total Materials: @Model.Materials.Count</p>
+        <a asp-action="Create" asp-route-subjectId="@Model.SubjectId" class="btn btn-add mb-3">Add New Material</a>
+    </div>
+
+    <div class="row g-3">
+        @if (!Model.Materials.Any())
+        {
+            <p class="text-center text-muted">No materials added yet.</p>
+        }
+        else
+        {
+            @foreach (var m in Model.Materials.OrderBy(m => m.UploadedAt))
+            {
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="dashboard-card p-3" style="background: #1f1f2a; border:1px solid #44445a; border-radius:10px;">
+                        <h5 style="color:#00f0ff;">@m.TopicTitle</h5>
+                        <div class="small text-muted">Uploaded: @m.UploadedAt.ToString("dd MMM yyyy")</div>
+                        <div class="d-flex gap-2 mt-3">
+                            <a asp-action="Edit" asp-route-id="@m.MaterialId" class="btn btn-edit">Edit</a>
+                            <form asp-action="DeleteConfirmed" method="post" onsubmit="return confirm('Delete this material?');" style="flex:1;">
+                                <input type="hidden" name="id" value="@m.MaterialId" />
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-delete">Delete</button>
+                            </form>
+                            <a href="@m.FilePath" target="_blank" class="btn btn-primary">Open PDF</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

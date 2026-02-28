@@ -26,5 +26,7 @@ namespace AdamsScienceHub.Models
         public int PageCount { get; set; } = 0;
 
         public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
+
+       
     }
 }
