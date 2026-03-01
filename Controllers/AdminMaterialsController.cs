@@ -141,6 +141,9 @@ namespace AdamsScienceHub.Controllers
                 material.FilePath = await UploadPdfToCloudinary(PdfFile);
             }
 
+            // FIX: Ensure UploadedAt is UTC
+            material.UploadedAt = DateTime.UtcNow;
+
             _db.Materials.Update(material);
             await _db.SaveChangesAsync();
 
