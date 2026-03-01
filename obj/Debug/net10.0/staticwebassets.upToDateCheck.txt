@@ -1,3 +1,4 @@
+wwwroot\css\site.css
 wwwroot\FaviconFile\favicon_io\android-chrome-192x192.png
 wwwroot\FaviconFile\favicon_io\android-chrome-512x512.png
 wwwroot\FaviconFile\favicon_io\apple-touch-icon.png
@@ -93,9 +94,9 @@ wwwroot\subjects\9c6fa940-c05e-40f4-96f9-302444c9198c.png
 wwwroot\subjects\a6138e0b-ba25-4bda-9b04-994406c516ab.png
 wwwroot\subjects\c62ad389-9fcc-4d12-82ef-cba0828c1b01.png
 wwwroot\subjects\eaa033b3-bc69-4c1c-87bb-1ecc2434fb21.jpg
-wwwroot\css\site.css
-C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\FaviconFile\favicon_io\favicon.ico
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\css\site.css
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\FaviconFile\favicon_io\site.webmanifest
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\FaviconFile\favicon_io\favicon.ico
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\js\site.js
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -156,4 +157,3 @@ C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\lib\jquery\d
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\lib\jquery\dist\jquery.slim.min.js
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\lib\jquery\dist\jquery.slim.min.map
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\lib\jquery\LICENSE.txt
-C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\wwwroot\css\site.css
