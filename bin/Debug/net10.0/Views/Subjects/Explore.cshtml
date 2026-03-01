@@ -22,12 +22,9 @@
             <div>⏱ Time Spent: <span id="timeSpent">00:00:00</span></div>
 
             <!-- 🕒 Current Time -->
-            @{
-                var nigeriaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Central Africa Standard Time");
-                var nigeriaTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, nigeriaTimeZone);
-            }
-            <div>🕒 Current Time: <span id="currentTime">@nigeriaTime.ToString("hh:mm:ss tt")</span></div>
+            <div>🕒 Current Time: <span id="currentTime"></span></div>
 
+   
         <!-- Material number display -->
             <div>📚 Total Materials: <span>@Model.Count()</span></div>
         </div>
@@ -84,3 +81,29 @@
     </script>
     
 }
+
+   
+<script>
+    // Live Current Time for Nigeria
+    function updateNigeriaTime() {
+        const nigeriaOffsetHours = 1; // W. Central Africa Standard Time is UTC+1
+        const now = new Date();
+        // convert UTC time to Nigeria time
+        const nigeriaTime = new Date(now.getTime() + nigeriaOffsetHours * 60 * 60 * 1000);
+
+        const hours = nigeriaTime.getHours().toString().padStart(2,'0');
+        const minutes = nigeriaTime.getMinutes().toString().padStart(2,'0');
+        const seconds = nigeriaTime.getSeconds().toString().padStart(2,'0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const hours12 = (hours % 12) || 12;
+
+        document.getElementById('currentTime').innerText = `${hours12.toString().padStart(2,'0')}:${minutes}:${seconds} ${ampm}`;
+    }
+
+    // Initial update
+    updateNigeriaTime();
+
+    // Update every second
+    setInterval(updateNigeriaTime, 1000);
+</script>
+            
