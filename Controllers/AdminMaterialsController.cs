@@ -142,7 +142,8 @@ namespace AdamsScienceHub.Controllers
             }
 
             // FIX: Ensure UploadedAt is UTC
-            material.UploadedAt = DateTime.UtcNow;
+            material.UploadedAt = DateTime.SpecifyKind(material.UploadedAt, DateTimeKind.Utc);
+
 
             _db.Materials.Update(material);
             await _db.SaveChangesAsync();
