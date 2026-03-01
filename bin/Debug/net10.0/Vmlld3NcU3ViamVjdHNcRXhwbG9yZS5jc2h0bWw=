@@ -27,6 +27,9 @@
                 var nigeriaTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, nigeriaTimeZone);
             }
             <div>🕒 Current Time: <span id="currentTime">@nigeriaTime.ToString("hh:mm:ss tt")</span></div>
+
+        <!-- Material number display -->
+            <div>📚 Material: <span>@Model.Count()</span> (total in this subject)</div>
         </div>
     </div>
 
