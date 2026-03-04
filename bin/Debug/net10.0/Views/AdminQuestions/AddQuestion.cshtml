@@ -17,6 +17,9 @@
         <div class="mb-3">
             <label>Question</label>
             <textarea asp-for="QuestionText" class="form-control"></textarea>
+            <p class="question-text">
+                @Html.Raw(Model.QuestionText.Replace("[blank]", "<span class='blank'></span>"))
+            </p>
         </div>
 
         <div class="mb-3">

@@ -808,14 +808,15 @@ h3 {
     font-size:  1rem;
     margin-bottom: 1rem;
 }
-.blank-space {
-    border-bottom: 2px solid #000;
+
+.blank {
     display: inline-block;
-    min-width: 60px;
-    margin: 0 5px;
-    white-space: nowrap;
-    word-wrap: normal;
-    overflow: visible;
+    width: 120px; /* length of the line */
+    border-bottom: 2px solid black;
+    margin: 0 2px;
+    vertical-align: bottom; /* aligns the line at the bottom of text */
+    position: relative;
+    top: 2.7px; /* moves the line slightly lower */
 }
 
 /* ----- Radio Buttons / Options ----- */
@@ -980,3 +981,6 @@ h3 {
     opacity: 0;
     transition: opacity 0.4s ease;
 }
+
+
+

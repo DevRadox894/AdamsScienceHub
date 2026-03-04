@@ -43,7 +43,7 @@
                     {
                         <tr>
                             <td>@q.QuestionId</td>
-                            <td>@Html.Raw(q.QuestionText.Replace("[", "<span class='blank-space'>[").Replace("]", "]</span>"))</td>
+                            <td>@Html.Raw(q.QuestionText.Replace("[blank]", "<span class='blank'></span>"))</td>
                             <td style="color: #00f0ff; font-weight: bold;">@q.CorrectAnswer</td>
                             <td style="color: #b0c4de;">
                                 <strong>A)</strong> @q.OptionA<br>

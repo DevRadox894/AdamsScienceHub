@@ -467,4 +467,4 @@ C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\Ad
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\ref\AdamsScienceHub.dll
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\bin\Debug\net10.0\wwwroot\Images\founderpic.jpeg
-C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\n14uazrawt-{0}-vkeuxavrzq-vkeuxavrzq.gz
+C:\Users\Sober\source\repos\AdamsScienceHub\AdamsScienceHub\obj\Debug\net10.0\compressed\n14uazrawt-{0}-0pja8j5ltb-0pja8j5ltb.gz

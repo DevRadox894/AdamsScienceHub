@@ -28,7 +28,7 @@
             int pageNumber = (i / 10) + 1;
 
             <div class="card p-4 mb-4 question-page question-page-@pageNumber @(pageNumber != 1 ? "d-none" : "")">
-                <h5 class="card-title">@(i + 1). @Html.Raw(Model[i].QuestionText.Replace("[       ]", "________"))</h5>
+                <h5 class="card-title">@(i + 1). @Html.Raw(Model[i].QuestionText.Replace("[blank]", "<span class='blank'></span>"))</h5>
 
                
                 <!-- Hidden QuestionId -->
